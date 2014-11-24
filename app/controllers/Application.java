@@ -9,6 +9,8 @@ import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
+import views.html.singIn;
+import views.html.singUp;
 
 import static play.data.Form.form;
 
@@ -44,7 +46,15 @@ public class Application extends Controller {
             }
         }
 
-        return ok(index.render(form(Register.class), form(Login.class)));
+        return ok(index.render());
+    }
+
+    public static Result login() {
+        return ok(singIn.render(form(Register.class), form(Login.class)));
+    }
+
+    public static Result singUp() {
+        return ok(singUp.render(form(Register.class), form(Login.class)));
     }
 
     /**
@@ -128,7 +138,7 @@ public class Application extends Controller {
         Form<Register> registerForm = form(Register.class);
 
         if (loginForm.hasErrors()) {
-            return badRequest(index.render(registerForm, loginForm));
+            return badRequest(index.render());
         } else {
             session("email", loginForm.get().email);
             return GO_DASHBOARD;

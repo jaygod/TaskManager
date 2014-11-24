@@ -1,29 +1,101 @@
-
 /* General */
 section {
-    padding-top: 20px;
+  padding-top: 20px;
 }
 
+/* Mixin */
+.border-radius (@radius: 5px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
 
 /* Password. */
 
-.is0{background:url(../images/progressImg1.png) no-repeat 0 0;width:138px;height:7px;}
-.is10{background-position:0 -7px;}
-.is20{background-position:0 -14px;}
-.is30{background-position:0 -21px;}
-.is40{background-position:0 -28px;}
-.is50{background-position:0 -35px;}
-.is60{background-position:0 -42px;}
-.is70{background-position:0 -49px;}
-.is80{background-position:0 -56px;}
-.is90{background-position:0 -63px;}
-.is100{background-position:0 -70px;}
+.is0 {
+  background: url(../images/progressImg1.png) no-repeat 0 0;
+  width: 138px;
+  height: 7px;
+}
+
+.is10 {
+  background-position: 0 -7px;
+}
+
+.is20 {
+  background-position: 0 -14px;
+}
+
+.is30 {
+  background-position: 0 -21px;
+}
+
+.is40 {
+  background-position: 0 -28px;
+}
+
+.is50 {
+  background-position: 0 -35px;
+}
+
+.is60 {
+  background-position: 0 -42px;
+}
+
+.is70 {
+  background-position: 0 -49px;
+}
+
+.is80 {
+  background-position: 0 -56px;
+}
+
+.is90 {
+  background-position: 0 -63px;
+}
+
+.is100 {
+  background-position: 0 -70px;
+}
 
 #passwordStrengthDiv, #passwordStrengthDiv2 {
-    float:left;
+  float: left;
 }
 
 .pointer {
-    cursor:pointer;
+  cursor: pointer;
 }
 
+.row2 {
+  background-color: #73a6d5;
+  /* IE9, iOS 3.2+ */
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxsaW5lYXJHcmFkaWVudCBpZD0idnNnZyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIHN0b3AtY29sb3I9IiM5NmY4ZmUiIHN0b3Atb3BhY2l0eT0iMSIgb2Zmc2V0PSIwIi8+PHN0b3Agc3RvcC1jb2xvcj0iIzRmNTNhYyIgc3RvcC1vcGFjaXR5PSIxIiBvZmZzZXQ9IjEiLz48L2xpbmVhckdyYWRpZW50PjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InVybCgjdnNnZykiIC8+PC9zdmc+);
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0, rgb(150, 248, 254)), color-stop(1, rgb(79, 83, 172)));
+  /* Android 2.3 */
+  background-image: -webkit-repeating-linear-gradient(top left, rgb(150, 248, 254) 0%, rgb(79, 83, 172) 100%);
+  /* IE10+ */
+  background-image: repeating-linear-gradient(to bottom right, rgb(150, 248, 254) 0%, rgb(79, 83, 172) 100%);
+  background-image: -ms-repeating-linear-gradient(top left, rgb(150, 248, 254) 0%, rgb(79, 83, 172) 100%);
+  box-shadow: 0 2px 10px black;
+  padding: 10px 15px 25px 15px;
+  width: 100%;
+  .border-radius(2px);
+}
+
+.singUp, .singIn {
+  background-color: #f5f5f5;
+  box-shadow: 0 0 30px black;
+  padding: 2px 15px 10px 15px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+  .border-radius(5px);
+}
+
+.menuButtons {
+  float: right;
+}
+
+.buttonSingup {
+  padding: 15px 15px 0 0;
+}
