@@ -1,4 +1,4 @@
-title=PlayStartApp
+title=Task Manager
 
 confirm=Confirmation
 email=Email
@@ -7,8 +7,8 @@ goback=Go Back
 logout=Logout
 password=Password
 error.technical=Technical Error, please Retry
-validate=Validate
-reset=Reset
+validate=Change email address
+reset=Reset password
 
 account.not.validated.check.mail=Account not validated. Check your emails.
 account.successfully.validated=Account successfully validated
@@ -24,7 +24,7 @@ error.confirm=Confirmation failed
 error.expiredresetlink=This password reset has expired.
 error.expiredmaillink=This mail change has expired.
 
-account.settings.password=Click OK to receive instructions by mail.
+account.settings.password=Click Reset button to reset your password.
 account.settings.email=Enter your new email address. Click OK to receive instructions on this new mail.
 
 signin.signin=Sign In
@@ -34,6 +34,9 @@ signin.your.password=Your password
 forgot.password=Forgot password ?
 
 signup.signup=Sign Up
+singup.your.name=Your name
+signup.your.password=Your password
+signup.repeatPassword=Repeat your password
 signup.successfull=Sign Up - Successful !
 signup.new=New ?
 signup.reset.password=Reset your password
@@ -48,21 +51,21 @@ resetpassword.new.password=New password :
 
 changemail.mailsent=A mail has been sent, please check your mail.
 
-mail.confirm.subject=Welcome to PlayStartApp - Ask for confirmation
-mail.confirm.message=Welcome to PlayStartApp. <br> Click on this link : {0} to confirm your email.
+mail.confirm.subject=Welcome to Task Manager - Ask for confirmation
+mail.confirm.message=Welcome to Task Manager. <br> Click on this link : {0} to confirm your email.
 
-mail.welcome.subject=Welcome to PlayStartApp
-mail.welcome.message=Welcome to PlayStartApp. <br> Your account is validated. Enjoy !
+mail.welcome.subject=Welcome to Task Manager
+mail.welcome.message=Welcome to Task Manager. <br> Your account is validated. Enjoy !
 
-mail.reset.ask.subject=PlayStartApp - New password
+mail.reset.ask.subject=Task Manager - New password
 # Cannot use You've unescaped here, as the single quote stops the {0}
 mail.reset.ask.message=You asked for your password to be reset.  <br> Click on this link : {0} to change your password.
 
-mail.change.ask.subject=PlayStartApp - Validate email
+mail.change.ask.subject=Task Manager - Validate email
 mail.change.ask.message=You asked for your email to be changed.  <br> Click on this link : {0} to validate your email.
 
 mail.reset.fail.subject=Account Access Attempted
 mail.reset.fail.message=You (or someone else) entered this email address when trying to change the password.  However, this email address is not on our list of registered users, and so the attempted password reset has failed.
 
-mail.reset.confirm.subject=PlayStartApp - New password
+mail.reset.confirm.subject=Task Manager - New password
 mail.reset.confirm.message=Hello, <br><br> Your password has been reset.

@@ -9,23 +9,39 @@
 
 @form(controllers.account.routes.Signup.save()) {
 
+    @if(signupForm.hasGlobalErrors) {
+        <p class="error">
+            <span class="label label-danger">@signupForm.globalError.message</span>
+        </p>
+    }
+
     <fieldset>
         @inputText(
             signupForm("email"),
             'placeholder -> Messages("email"),
             '_label -> null,
+            '_help -> Messages("signin.your.email"),
             'class -> "form-control"
         )
         @inputText(
             signupForm("fullname"),
             'placeholder -> Messages("fullname"),
             '_label -> null,
+            '_help -> Messages("singup.your.name"),
             'class -> "form-control"
         )
         @inputPassword(
             signupForm("inputPassword"),
             '_label -> null,
             'placeholder -> Messages("password"),
+            '_help -> Messages("signup.your.password"),
+            'class -> "form-control"
+        )
+        @inputPassword(
+            signupForm("repeatPassword"),
+            '_label -> null,
+            'placeholder -> Messages("password"),
+            '_help -> Messages("signup.repeatPassword"),
             'class -> "form-control"
         )
     </fieldset>
