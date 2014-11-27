@@ -15,6 +15,7 @@ import play.mvc.Result;
 import views.html.account.signup.confirm;
 import views.html.account.signup.create;
 import views.html.account.signup.created;
+import views.html.singUp;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -57,7 +58,7 @@ public class Signup extends Controller {
         Form<Application.Register> registerForm = form(Application.Register.class).bindFromRequest();
 
         if (registerForm.hasErrors()) {
-            return badRequest(create.render(registerForm));
+            return badRequest(singUp.render(registerForm));
         }
 
         Application.Register register = registerForm.get();

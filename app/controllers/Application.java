@@ -9,6 +9,8 @@ import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
+import views.html.singIn;
+import views.html.singUp;
 
 import static play.data.Form.form;
 
@@ -44,7 +46,15 @@ public class Application extends Controller {
             }
         }
 
-        return ok(index.render(form(Register.class), form(Login.class)));
+        return ok(index.render());
+    }
+
+    public static Result login() {
+        return ok(singIn.render(form(Login.class)));
+    }
+
+    public static Result singUp() {
+        return ok(singUp.render(form(Register.class)));
     }
 
     /**
@@ -82,7 +92,10 @@ public class Application extends Controller {
 
     public static class Register {
 
+        public static final int MIN_PASSWORD_LENGTH = 4;
+
         @Constraints.Required
+        @Constraints.Email
         public String email;
 
         @Constraints.Required
@@ -90,6 +103,10 @@ public class Application extends Controller {
 
         @Constraints.Required
         public String inputPassword;
+
+        @Constraints.Required
+        public String repeatPassword;
+
 
         /**
          * Validate the authentication.
@@ -100,13 +117,20 @@ public class Application extends Controller {
             if (isBlank(email)) {
                 return "Email is required";
             }
-
             if (isBlank(fullname)) {
                 return "Full name is required";
             }
 
             if (isBlank(inputPassword)) {
                 return "Password is required";
+            }
+
+            if (isBlank(repeatPassword) || !repeatPassword.equals(inputPassword) ) {
+                return "Passwords does not match";
+            }
+
+            if (inputPassword.length() < MIN_PASSWORD_LENGTH) {
+                return "Password must be at least 4 characters long";
             }
 
             return null;
@@ -128,7 +152,7 @@ public class Application extends Controller {
         Form<Register> registerForm = form(Register.class);
 
         if (loginForm.hasErrors()) {
-            return badRequest(index.render(registerForm, loginForm));
+            return badRequest(singIn.render(loginForm));
         } else {
             session("email", loginForm.get().email);
             return GO_DASHBOARD;

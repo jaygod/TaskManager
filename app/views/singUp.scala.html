@@ -1,0 +1,9 @@
+@(signupForm: Form[Application.Register])
+
+@main(null) {
+    <div class="row2">
+        <div class="singUp">
+             @account.signup.createFormOnly(signupForm)
+        </div>
+    </div>
+}
