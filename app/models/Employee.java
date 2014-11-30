@@ -12,14 +12,14 @@ import javax.persistence.Id;
 import java.util.Date;
 
 /**
- * User: yesnault
+ * Employee: yesnault
  * Date: 20/01/12
  */
 @Entity
-public class User extends Model {
+public class Employee extends Model {
 
     @Id
-    public Long id;
+    public Integer id;
 
     @Constraints.Required
     @Formats.NonEmpty
@@ -44,7 +44,7 @@ public class User extends Model {
     public Boolean validated = false;
 
     // -- Queries (long id, user.class)
-    public static Model.Finder<Long, User> find = new Model.Finder<Long, User>(Long.class, User.class);
+    public static Model.Finder<Integer, Employee> find = new Model.Finder<Integer, Employee>(Integer.class, Employee.class);
 
     /**
      * Retrieve a user from an email.
@@ -52,7 +52,7 @@ public class User extends Model {
      * @param email email to search
      * @return a user
      */
-    public static User findByEmail(String email) {
+    public static Employee findByEmail(String email) {
         return find.where().eq("email", email).findUnique();
     }
 
@@ -62,7 +62,7 @@ public class User extends Model {
      * @param fullname Full name
      * @return a user
      */
-    public static User findByFullname(String fullname) {
+    public static Employee findByFullname(String fullname) {
         return find.where().eq("fullname", fullname).findUnique();
     }
 
@@ -72,22 +72,22 @@ public class User extends Model {
      * @param token the confirmation token to use.
      * @return a user if the confirmation token is found, null otherwise.
      */
-    public static User findByConfirmationToken(String token) {
+    public static Employee findByConfirmationToken(String token) {
         return find.where().eq("confirmationToken", token).findUnique();
     }
 
     /**
-     * Authenticate a User, from a email and clear password.
+     * Authenticate a Employee, from a email and clear password.
      *
      * @param email         email
      * @param clearPassword clear password
-     * @return User if authenticated, null otherwise
+     * @return Employee if authenticated, null otherwise
      * @throws AppException App Exception
      */
-    public static User authenticate(String email, String clearPassword) throws AppException {
+    public static Employee authenticate(String email, String clearPassword) throws AppException {
 
         // get the user with email only to keep the salt password
-        User user = find.where().eq("email", email).findUnique();
+        Employee user = find.where().eq("email", email).findUnique();
         if (user != null) {
             // get the hash password from the salt + clear password
             if (Hash.checkPassword(clearPassword, user.passwordHash)) {
@@ -108,7 +108,7 @@ public class User extends Model {
      * @return true if confirmed, false otherwise.
      * @throws AppException App Exception
      */
-    public static boolean confirm(User user) throws AppException {
+    public static boolean confirm(Employee user) throws AppException {
         if (user == null) {
             return false;
         }

@@ -2,7 +2,7 @@ package controllers.account.settings;
 
 import controllers.Secured;
 import models.Token;
-import models.User;
+import models.Employee;
 import play.Logger;
 import play.i18n.Messages;
 import play.mvc.Controller;
@@ -13,7 +13,7 @@ import views.html.account.settings.password;
 import java.net.MalformedURLException;
 
 /**
- * User: yesnault
+ * Employee: yesnault
  * Date: 15/05/12
  */
 @Security.Authenticated(Secured.class)
@@ -25,7 +25,7 @@ public class Password extends Controller {
      * @return index settings
      */
     public static Result index() {
-        return ok(password.render(User.findByEmail(request().username())));
+        return ok(password.render(Employee.findByEmail(request().username())));
     }
 
     /**
@@ -34,7 +34,7 @@ public class Password extends Controller {
      * @return password page with flash error or success
      */
     public static Result runPassword() {
-        User user = User.findByEmail(request().username());
+        Employee user = Employee.findByEmail(request().username());
         try {
             Token.sendMailResetPassword(user);
             flash("success", Messages.get("resetpassword.mailsent"));

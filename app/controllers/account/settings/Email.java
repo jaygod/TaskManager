@@ -1,8 +1,8 @@
 package controllers.account.settings;
 
 import controllers.Secured;
+import models.Employee;
 import models.Token;
-import models.User;
 import play.Logger;
 import play.data.Form;
 import play.data.validation.Constraints;
@@ -20,7 +20,7 @@ import static play.data.Form.form;
 /**
  * Settings -> Email page.
  * <p/>
- * User: yesnault
+ * Employee: yesnault
  * Date: 23/06/12
  */
 @Security.Authenticated(Secured.class)
@@ -41,10 +41,10 @@ public class Email extends Controller {
      * @return index settings
      */
     public static Result index() {
-        User user = User.findByEmail(request().username());
+        Employee user = Employee.findByEmail(request().username());
         Form<AskForm> askForm = form(AskForm.class);
         askForm = askForm.fill(new AskForm(user.email));
-        return ok(email.render(User.findByEmail(request().username()), askForm));
+        return ok(email.render(Employee.findByEmail(request().username()), askForm));
     }
 
     /**
@@ -54,7 +54,7 @@ public class Email extends Controller {
      */
     public static Result runEmail() {
         Form<AskForm> askForm = form(AskForm.class).bindFromRequest();
-        User user = User.findByEmail(request().username());
+        Employee user = Employee.findByEmail(request().username());
 
         if (askForm.hasErrors()) {
             flash("error", Messages.get("signup.valid.email"));
@@ -79,7 +79,7 @@ public class Email extends Controller {
      * @return email page with flash error or success
      */
     public static Result validateEmail(String token) {
-        User user = User.findByEmail(request().username());
+        Employee user = Employee.findByEmail(request().username());
 
         if (token == null) {
             flash("error", Messages.get("error.technical"));
