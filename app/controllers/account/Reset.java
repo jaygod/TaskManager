@@ -1,7 +1,7 @@
 package controllers.account;
 
+import models.Employee;
 import models.Token;
-import models.User;
 import models.utils.AppException;
 import models.utils.Mail;
 import org.apache.commons.mail.EmailException;
@@ -26,7 +26,7 @@ import static play.data.Form.form;
  * - show the reset page and set them reset it.
  * <p/>
  * <p/>
- * User: yesnault
+ * Employee: yesnault
  * Date: 20/01/12
  */
 public class Reset extends Controller {
@@ -66,7 +66,7 @@ public class Reset extends Controller {
 
         final String email = askForm.get().email;
         Logger.debug("runAsk: email = " + email);
-        User user = User.findByEmail(email);
+        Employee user = Employee.findByEmail(email);
         Logger.debug("runAsk: user = " + user);
 
         // If we do not have this email address in the list, we should not expose this to the user.
@@ -155,7 +155,7 @@ public class Reset extends Controller {
             }
 
             // check email
-            User user = User.find.byId(resetToken.userId);
+            Employee user = Employee.find.byId(resetToken.userId);
             if (user == null) {
                 // display no detail (email unknown for example) to
                 // avoir check email by foreigner
@@ -186,7 +186,7 @@ public class Reset extends Controller {
      * @param user user created
      * @throws EmailException Exception when sending mail
      */
-    private static void sendPasswordChanged(User user) throws EmailException {
+    private static void sendPasswordChanged(Employee user) throws EmailException {
         String subject = Messages.get("mail.reset.confirm.subject");
         String message = Messages.get("mail.reset.confirm.message");
         Mail.Envelop envelop = new Mail.Envelop(subject, message, user.email);

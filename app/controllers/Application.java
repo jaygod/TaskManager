@@ -1,6 +1,6 @@
 package controllers;
 
-import models.User;
+import models.Employee;
 import models.utils.AppException;
 import play.Logger;
 import play.data.Form;
@@ -16,7 +16,7 @@ import static play.data.Form.form;
 
 /**
  * Login and Logout.
- * User: yesnault
+ * Employee: yesnault
  */
 public class Application extends Controller {
 
@@ -37,7 +37,7 @@ public class Application extends Controller {
         // Check that the email matches a confirmed user before we redirect
         String email = ctx().session().get("email");
         if (email != null) {
-            User user = User.findByEmail(email);
+            Employee user = Employee.findByEmail(email);
             if (user != null && user.validated) {
                 return GO_DASHBOARD;
             } else {
@@ -74,9 +74,9 @@ public class Application extends Controller {
          */
         public String validate() {
 
-            User user = null;
+            Employee user = null;
             try {
-                user = User.authenticate(email, password);
+                user = Employee.authenticate(email, password);
             } catch (AppException e) {
                 return Messages.get("error.technical");
             }

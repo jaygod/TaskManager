@@ -3,7 +3,7 @@ package models.utils;
 import play.Logger;
 
 /**
- * User: yesnault
+ * Employee: yesnault
  * Date: 25/01/12
  */
 public class ExceptionFactory {

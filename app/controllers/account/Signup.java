@@ -1,7 +1,7 @@
 package controllers.account;
 
 import controllers.Application;
-import models.User;
+import models.Employee;
 import models.utils.AppException;
 import models.utils.Hash;
 import models.utils.Mail;
@@ -26,7 +26,7 @@ import static play.data.Form.form;
 /**
  * Signup to PlayStartApp : save and send confirm mail.
  * <p/>
- * User: yesnault
+ * Employee: yesnault
  * Date: 31/01/12
  */
 public class Signup extends Controller {
@@ -69,7 +69,7 @@ public class Signup extends Controller {
         }
 
         try {
-            User user = new User();
+            Employee user = new Employee();
             user.email = register.email;
             user.fullname = register.fullname;
             user.passwordHash = Hash.createPassword(register.inputPassword);
@@ -92,13 +92,13 @@ public class Signup extends Controller {
     /**
      * Check if the email already exists.
      *
-     * @param registerForm User Form submitted
+     * @param registerForm Employee Form submitted
      * @param email email address
      * @return Index if there was a problem, null otherwise
      */
     private static Result checkBeforeSave(Form<Application.Register> registerForm, String email) {
         // Check unique email
-        if (User.findByEmail(email) != null) {
+        if (Employee.findByEmail(email) != null) {
             flash("error", Messages.get("error.email.already.exist"));
             return badRequest(create.render(registerForm));
         }
@@ -112,7 +112,7 @@ public class Signup extends Controller {
      * @param user user created
      * @throws EmailException Exception when sending mail
      */
-    private static void sendMailAskForConfirmation(User user) throws EmailException, MalformedURLException {
+    private static void sendMailAskForConfirmation(Employee user) throws EmailException, MalformedURLException {
         String subject = Messages.get("mail.confirm.subject");
 
         String urlString = "http://" + Configuration.root().getString("server.hostname");
@@ -131,7 +131,7 @@ public class Signup extends Controller {
      * @return Confirmationpage
      */
     public static Result confirm(String token) {
-        User user = User.findByConfirmationToken(token);
+        Employee user = Employee.findByConfirmationToken(token);
         if (user == null) {
             flash("error", Messages.get("error.unknown.email"));
             return badRequest(confirm.render());
@@ -143,7 +143,7 @@ public class Signup extends Controller {
         }
 
         try {
-            if (User.confirm(user)) {
+            if (Employee.confirm(user)) {
                 sendMailConfirmation(user);
                 flash("success", Messages.get("account.successfully.validated"));
                 return ok(confirm.render());
@@ -168,7 +168,7 @@ public class Signup extends Controller {
      * @param user user created
      * @throws EmailException Exception when sending mail
      */
-    private static void sendMailConfirmation(User user) throws EmailException {
+    private static void sendMailConfirmation(Employee user) throws EmailException {
         String subject = Messages.get("mail.welcome.subject");
         String message = Messages.get("mail.welcome.message");
         Mail.Envelop envelop = new Mail.Envelop(subject, message, user.email);

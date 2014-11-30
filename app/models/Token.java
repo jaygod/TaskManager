@@ -43,7 +43,7 @@ public class Token extends Model {
 
     @Constraints.Required
     @Formats.NonEmpty
-    public Long userId;
+    public Integer userId;
 
     @Constraints.Required
     @Enumerated(EnumType.STRING)
@@ -95,7 +95,7 @@ public class Token extends Model {
      * @param email email for a token change email
      * @return a reset token
      */
-    private static Token getNewToken(User user, TypeToken type, String email) {
+    private static Token getNewToken(Employee user, TypeToken type, String email) {
         Token token = new Token();
         token.token = UUID.randomUUID().toString();
         token.userId = user.id;
@@ -111,7 +111,7 @@ public class Token extends Model {
      * @param user the current user
      * @throws java.net.MalformedURLException if token is wrong.
      */
-    public static void sendMailResetPassword(User user) throws MalformedURLException {
+    public static void sendMailResetPassword(Employee user) throws MalformedURLException {
         sendMail(user, TypeToken.password, null);
     }
 
@@ -122,7 +122,7 @@ public class Token extends Model {
      * @param email email for a change email token
      * @throws java.net.MalformedURLException if token is wrong.
      */
-    public static void sendMailChangeMail(User user, @Nullable String email) throws MalformedURLException {
+    public static void sendMailChangeMail(Employee user, @Nullable String email) throws MalformedURLException {
         sendMail(user, TypeToken.email, email);
     }
 
@@ -134,7 +134,7 @@ public class Token extends Model {
      * @param email email for a change email token
      * @throws java.net.MalformedURLException if token is wrong.
      */
-    private static void sendMail(User user, TypeToken type, String email) throws MalformedURLException {
+    private static void sendMail(Employee user, TypeToken type, String email) throws MalformedURLException {
 
         Token token = getNewToken(user, type, email);
         String externalServer = Configuration.root().getString("server.hostname");
