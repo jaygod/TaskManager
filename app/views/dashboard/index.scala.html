@@ -2,6 +2,14 @@
 
 @main(user) {
 
+    <div class="btn-group-vertical col-lg-2" role="group" aria-label="...">
+    @if(user.isAdmin) {
+        <a href="createproject" type="button" class="btn btn-info navbar-btn" data-target="#createProject">Create Project</a>
+        <a href="createtask" type="button" class="btn btn-info navbar-btn" data-target="#createTask">Create Task</a>
+    }
+    </div>
+
+
     <div class="panel panel-default col-lg-4">
             <!-- Default panel contents -->
         <div class="panel-heading">Tasks list</div>

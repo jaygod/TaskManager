@@ -2,14 +2,24 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+# Global
+GET         /getProjects                  controllers.Application.getAllProjects()
+
+
 # Home page
 GET         /                             controllers.Application.index()
 GET         /dashboard                    controllers.Dashboard.index()
 
+#Dashboard
+GET         /createproject                controllers.Dashboard.createProject()
+GET         /createtask                   controllers.Dashboard.createTask()
+
+# Login Page
 GET         /login                        controllers.Application.login()
 POST        /login                        controllers.Application.authenticate()
 GET         /logout                       controllers.Application.logout()
 
+# Settings
 GET         /settings                     controllers.account.settings.Index.index()
 GET         /settings/password            controllers.account.settings.Password.index()
 POST        /settings/password            controllers.account.settings.Password.runPassword()

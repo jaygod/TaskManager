@@ -1,11 +1,13 @@
 package controllers;
 
 import models.Employee;
+import models.datamodel.Project;
 import models.utils.AppException;
 import play.Logger;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.i18n.Messages;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
@@ -55,6 +57,10 @@ public class Application extends Controller {
 
     public static Result singUp() {
         return ok(singUp.render(form(Register.class)));
+    }
+
+    public static Result getAllProjects() {
+        return ok(Json.toJson(Project.find.all()));
     }
 
     /**

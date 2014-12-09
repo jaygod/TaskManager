@@ -44,6 +44,21 @@ signup.generate.password=Generate a password
 signup.msg.created=You will receive a confirmation email soon. Check your email to activate your account.
 signup.valid.email=Invalid Email
 
+dashboard.createproject.createproject=Create Project
+dashboard.createproject.projectname=Project name
+dashboard.createproject.description=Description
+dashboard.createproject.due_date=Deadline
+
+dashboard.createtask.createissue=Create issue
+dashboard.createtask.project=Project
+dashboard.createtask.issuetype=Issue Type
+dashboard.createtask.summary=Summary
+dashboard.createtask.priority=Priority
+dashboard.createtask.label=Label
+dashboard.createtask.attatchment=Attatchment
+dashboard.createtask.description=Description
+dashboard.createtask.duedate=Due Date
+
 resetpassword=Reset Password
 resetpassword.mailsent=A mail has been sent, please check your mail.
 resetpassword.success=Your password has been reset.

@@ -35,6 +35,10 @@ public class Employee extends Model {
 
     @Constraints.Required
     @Formats.NonEmpty
+    public boolean isAdmin;
+
+    @Constraints.Required
+    @Formats.NonEmpty
     public String passwordHash;
 
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")

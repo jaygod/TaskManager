@@ -1,0 +1,45 @@
+@(user: Employee)(createTaskForm: Form[Dashboard.CreateTask])
+
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@form(routes.Application.authenticate(), 'class -> "form") {
+
+    @main(user) {
+
+        <div class="singIn">
+            <h3>@Messages("dashboard.createtask.createissue")</h3>
+
+            @if(createTaskForm.hasGlobalErrors) {
+                <p class="error">
+                    <span class="label label-danger">@createTaskForm.globalError.message</span>
+                </p>
+            }
+
+            <fieldset>
+                @for(product <- createTaskForm.get.getAllProjectsNames) {
+                    @inputText(product)
+                }
+                @inputText(
+                    createTaskForm("description"),
+                    'placeholder -> Messages("Project description"),
+                    '_label -> null,
+                    '_help -> Messages("dashboard.createproject.description"),
+                    'class -> "form-control"
+                )
+                @inputText(
+                    createTaskForm("due_date"),
+                    '_label -> null,
+                    'placeholder -> Messages("Project due_date"),
+                    '_help -> Messages("dashboard.createproject.due_date"),
+                    'class -> "form-control"
+                )
+            </fieldset>
+            <div class="container buttonSingup">
+                <div class="form-actions">
+                    <input type="submit" class="btn btn-primary" value="@Messages("dashboard.createtask.createissue")">
+                </div>
+            </div>
+        </div>
+    }
+}
