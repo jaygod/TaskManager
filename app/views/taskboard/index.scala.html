@@ -1,0 +1,51 @@
+@(user: Employee)(taskProperties: models.datamodel.TaskProperties)(task: models.datamodel.Task)(attachment: models.datamodel.Task.Attachment)
+
+@main(user) {
+
+    <h4>@task.code</h4>
+    <h2>@task.summary</h2>
+
+    <hr class="divider">
+
+    @*Details*@
+    <div class="panel panel-info taskPanel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Details</h3>
+        </div>
+        <div class="panel-body">
+        @taskProperties.priority
+            @taskProperties.deadline
+        </div>
+    </div>
+
+    @*Description*@
+    <div class="panel panel-info taskPanel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Description</h3>
+        </div>
+        <div class="panel-body">
+        @task.description
+        </div>
+    </div>
+
+    @*Attachments*@
+    <div class="panel panel-info taskPanel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Attachments</h3>
+        </div>
+        <div class="panel-body">
+            <img alt=""  src="@attachment.data"/>
+        </div>
+    </div>
+
+
+    @*Comments*@
+    <div class="panel panel-info taskPanel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Comments</h3>
+        </div>
+        <div class="panel-body">
+        Tu będą komentarze
+        </div>
+    </div>
+}

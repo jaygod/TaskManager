@@ -16,6 +16,10 @@ POST        /createproject                controllers.Dashboard.saveProject()
 GET         /createtask                   controllers.Dashboard.createTask()
 POST        /createtask                   controllers.Dashboard.saveTask()
 
+#TaskBoard
+GET         /:code                     controllers.TaskBoard.index(code: String)
+
+
 # Login Page
 GET         /login                        controllers.Application.login()
 POST        /login                        controllers.Application.authenticate()

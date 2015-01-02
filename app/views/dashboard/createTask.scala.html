@@ -1,11 +1,12 @@
-@(user: Employee)(createTaskForm: Form[Dashboard.CreateTask])(projectsList: List[String])(taskTypes: List[String])(employeeNamesList: List[String])
+@(user: Employee)(createTaskForm: Form[Dashboard.CreateTask])(projectsList: List[String])(taskTypes: List[String])(employeeNamesList: List[String])(taskPriorites: List[String])
 
 @import helper._
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
-@form(controllers.routes.Dashboard.saveTask()) {
+@form(action = controllers.routes.Dashboard.saveTask(), 'enctype -> "multipart/form-data") {
 
     @main(user) {
+
 
         <div class="createTask">
             <h3>@Messages("dashboard.createtask.createissue")</h3>
@@ -34,6 +35,12 @@
                 @select(
                     field = createTaskForm("assigneFullName"),
                     options = options(employeeNamesList),
+                    '_label -> null
+                )
+                Priority
+                @select(
+                    field = createTaskForm("priority"),
+                    options = options(taskPriorites),
                     '_label -> null
                 )
                 Summary
