@@ -1,4 +1,4 @@
-@(user: Employee)
+@(user: Employee)(projectsList: List[String])
 
 @main(user) {
 
@@ -9,43 +9,14 @@
     }
     </div>
 
-
     <div class="panel panel-default col-lg-4">
             <!-- Default panel contents -->
-        <div class="panel-heading">Tasks list</div>
-        @*<div class="panel-body">*@
-          @**@
-        @*</div>*@
+        <div class="panel-heading">Project list</div>
 
-            <!-- Table -->
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Task name</th>
-                    <th>Priority</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                </tr>
-            </tbody>
-        </table>
+        @for(project <- projectsList) {
+            <option data-icon="glyphicon-heart">@project</option>
+        }
+
     </div>
 
 }

@@ -6,10 +6,9 @@ import play.data.format.Formats;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Employee: yesnault
@@ -19,6 +18,9 @@ import java.util.Date;
 public class Employee extends Model {
 
     @Id
+    @Column(name = "id")
+    @SequenceGenerator(name="employee_gen", sequenceName="employee_id_seq",allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_gen")
     public Integer id;
 
     @Constraints.Required
@@ -119,8 +121,14 @@ public class Employee extends Model {
 
         user.confirmationToken = null;
         user.validated = true;
+        user.dateCreation = new Date();
+        user.dateCreation.setTime(System.currentTimeMillis());
         user.save();
         return true;
+    }
+
+    public static List<Employee> all() {
+        return find.all();
     }
 
 }

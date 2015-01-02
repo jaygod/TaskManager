@@ -4,7 +4,7 @@ import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,19 +12,25 @@ import java.util.List;
  */
 @Entity
 @Table(name="\"project\"")
-public class Project  extends Model {
+public class Project extends Model {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "id")
+    @SequenceGenerator(name="project_gen", sequenceName="project_id_seq", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_gen")
+    protected int id;
+
     @Constraints.Required
-    private String name;
+        private String name;
+
     @Constraints.Required
     private String summary;
+
     @Constraints.Required
     private String version;
+
     @Constraints.Required
-    private Timestamp deadline;
+    private Date deadline;
 
     public static Finder<Integer, Project> find = new Finder<Integer, Project>(Integer.class, Project.class);
 
@@ -64,11 +70,21 @@ public class Project  extends Model {
         this.version = version;
     }
 
-    public Timestamp getDeadline() {
+    public Date getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Timestamp deadline) {
+    public void setDeadline(Date deadline) {
         this.deadline = deadline;
+    }
+
+    /**
+     * Retrieve a project from a projectName.
+     *
+     * @param projectName Full name
+     * @return a user
+     */
+    public static Project findByProjectName(String projectName) {
+        return find.where().eq("name", projectName).findUnique();
     }
 }

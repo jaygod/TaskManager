@@ -12,7 +12,9 @@ GET         /dashboard                    controllers.Dashboard.index()
 
 #Dashboard
 GET         /createproject                controllers.Dashboard.createProject()
+POST        /createproject                controllers.Dashboard.saveProject()
 GET         /createtask                   controllers.Dashboard.createTask()
+POST        /createtask                   controllers.Dashboard.saveTask()
 
 # Login Page
 GET         /login                        controllers.Application.login()

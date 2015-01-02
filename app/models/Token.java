@@ -9,10 +9,7 @@ import play.db.ebean.Model;
 import play.i18n.Messages;
 
 import javax.annotation.Nullable;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;

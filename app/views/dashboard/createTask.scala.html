@@ -1,13 +1,13 @@
-@(user: Employee)(createTaskForm: Form[Dashboard.CreateTask])
+@(user: Employee)(createTaskForm: Form[Dashboard.CreateTask])(projectsList: List[String])(taskTypes: List[String])(employeeNamesList: List[String])
 
 @import helper._
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
-@form(routes.Application.authenticate(), 'class -> "form") {
+@form(controllers.routes.Dashboard.saveTask()) {
 
     @main(user) {
 
-        <div class="singIn">
+        <div class="createTask">
             <h3>@Messages("dashboard.createtask.createissue")</h3>
 
             @if(createTaskForm.hasGlobalErrors) {
@@ -17,25 +17,60 @@
             }
 
             <fieldset>
-                @for(product <- createTaskForm.get.getAllProjectsNames) {
-                    @inputText(product)
-                }
+
+                Select Project
+                @select(
+                    field = createTaskForm("projectName"),
+                    options = options(projectsList),
+                    '_label -> null
+                )
+                Select task type
+                    @select(
+                        field = createTaskForm("issueType"),
+                        options = options(taskTypes),
+                        '_label -> null
+                    )
+                Assigne
+                @select(
+                    field = createTaskForm("assigneFullName"),
+                    options = options(employeeNamesList),
+                    '_label -> null
+                )
+                Summary
+                @inputText(
+                    createTaskForm("summary"),
+                    'placeholder -> Messages("Project summary"),
+                    '_label -> null,
+                    'class -> "form-control"
+                )
+                Label
+                @inputText(
+                    createTaskForm("labels"),
+                    '_label -> null,
+                    'placeholder -> Messages("Labels"),
+                    'class -> "form-control"
+                )
+                Description
                 @inputText(
                     createTaskForm("description"),
                     'placeholder -> Messages("Project description"),
                     '_label -> null,
-                    '_help -> Messages("dashboard.createproject.description"),
-                    'class -> "form-control"
+                    'class -> "form-control descriptionForm"
                 )
-                @inputText(
-                    createTaskForm("due_date"),
-                    '_label -> null,
-                    'placeholder -> Messages("Project due_date"),
-                    '_help -> Messages("dashboard.createproject.due_date"),
-                    'class -> "form-control"
+                Attatchments
+                @inputFile(
+                    field = createTaskForm("file"),
+                    args = 'size -> 10,
+                    '_label -> null
+                )
+
+                Project deadline
+                @inputDate(
+                    createTaskForm("deadline"),
+                    '_label -> null
                 )
             </fieldset>
-            <div class="container buttonSingup">
+            <div class="container buttonCreateIssue">
                 <div class="form-actions">
                     <input type="submit" class="btn btn-primary" value="@Messages("dashboard.createtask.createissue")">
                 </div>
