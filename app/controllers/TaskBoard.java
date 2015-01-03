@@ -23,6 +23,7 @@ public class TaskBoard extends Controller {
 
         TaskProperties taskProperties = TaskProperties.getTaskProperties(task.getId());
         task.setTaskProperties(taskProperties);
+        task.getAssigned();
 
         return ok(index.render(Employee.findByEmail(request().username()), task));
     }

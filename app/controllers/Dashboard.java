@@ -14,6 +14,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import views.html.account.userPage;
 import views.html.dashboard.*;
 
 import java.io.File;
@@ -29,6 +30,12 @@ public class Dashboard extends Controller {
     public static Result index() {
         return ok(index.render(Employee.findByEmail(request().username()), Utils.getAllProjectsNames(), Utils.getAllAssignedTasks()));
     }
+
+    public static Result userPage(long id) {
+        Employee employee = Utils.getEmployee(id);
+        return ok(userPage.render(Employee.findByEmail(request().username()), employee));
+    }
+
 
     public static Result createProject() {
         return ok(createProject.render(Employee.findByEmail(request().username()), form(CreateProject.class)));

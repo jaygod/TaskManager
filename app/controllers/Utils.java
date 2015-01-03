@@ -91,4 +91,11 @@ public class Utils extends Controller {
 
         return taskList;
     }
+
+    public static Employee getEmployee(long id) {
+        Employee employee = Ebean.find(Employee.class)
+                .where()
+                .eq("id", id).findUnique();
+        return employee;
+    }
 }

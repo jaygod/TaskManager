@@ -1,0 +1,24 @@
+@(user: Employee)(employee: Employee)
+
+@main(user) {
+    <div class="row">
+        <div class="panel panel-info taskPanel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><b>User info</b></h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-4 col-md-offset-5">
+                    <img src="http://files.giercownia.pl/upload/avatars/m/matrix57.png?v=0" alt="avatar"> <br>
+                </div>
+                <div class="col-md-4">
+                    <b>Username: </b>@employee.fullname <br>
+                    <b>Email: </b><a href="mailto:@employee.email">@employee.email</a> <br>
+                    <b>Joined: </b>@employee.dateCreation <br>
+                    <a href="dashboard" type="button" class="btn btn-info" data-target="#dashboard">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+

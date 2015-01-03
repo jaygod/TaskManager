@@ -1,6 +1,7 @@
 package models.datamodel;
 
 import com.avaje.ebean.Ebean;
+import models.Employee;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
@@ -17,6 +18,7 @@ public class Task extends Model {
 
     private TaskProperties taskProperties;
     private Attachment attachment;
+    private Employee assigned;
 
     @Id
     @Column(name = "id")
@@ -81,5 +83,23 @@ public class Task extends Model {
 
     public Attachment getAttachment() {
         return attachment;
+    }
+
+    public Employee getAssigned() {
+        if (assigned == null) {
+            assigned = getAssignedFromDatabase();
+        }
+        return assigned;
+    }
+
+    public void setAssigned(Employee assigned) {
+        this.assigned = assigned;
+    }
+
+    public Employee getAssignedFromDatabase() {
+        Employee assigned = Ebean.find(Employee.class)
+                .where()
+                .eq("id", this.assigne).findUnique();
+        return assigned;
     }
 }

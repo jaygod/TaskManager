@@ -17,13 +17,16 @@ GET         /createtask                   controllers.Dashboard.createTask()
 POST        /createtask                   controllers.Dashboard.saveTask()
 
 #TaskBoard
-GET         /task/:code                     controllers.TaskBoard.index(code: String)
+GET         /task/:code                   controllers.TaskBoard.index(code: String)
 
 
 # Login Page
 GET         /login                        controllers.Application.login()
 POST        /login                        controllers.Application.authenticate()
 GET         /logout                       controllers.Application.logout()
+
+# UserPage
+GET         /user/:id                     controllers.Dashboard.userPage(id: Long)
 
 # Settings
 GET         /settings                     controllers.account.settings.Index.index()
