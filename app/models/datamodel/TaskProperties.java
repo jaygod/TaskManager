@@ -5,7 +5,6 @@ import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +14,8 @@ import java.util.List;
 @Entity
 @Table(name="\"taskproperties\"")
 public class TaskProperties extends Model {
+
+    private TaskType taskType;
 
     @Id
     @Column(name = "id")
@@ -59,5 +60,23 @@ public class TaskProperties extends Model {
                 .eq("task_id", taskId).findUnique();
 
         return properties;
+    }
+
+    public TaskType getTaskType() {
+        if (taskType == null) {
+            taskType = getTaskTypeFromDatabase();
+        }
+        return taskType;
+    }
+
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
+    }
+
+    public TaskType getTaskTypeFromDatabase() {
+        TaskType taskType = Ebean.find(TaskType.class)
+                .where()
+                .eq("id", this.type).findUnique();
+        return taskType;
     }
 }

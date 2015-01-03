@@ -17,7 +17,7 @@ GET         /createtask                   controllers.Dashboard.createTask()
 POST        /createtask                   controllers.Dashboard.saveTask()
 
 #TaskBoard
-GET         /:code                     controllers.TaskBoard.index(code: String)
+GET         /task/:code                     controllers.TaskBoard.index(code: String)
 
 
 # Login Page

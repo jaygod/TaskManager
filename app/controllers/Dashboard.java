@@ -1,9 +1,11 @@
 package controllers;
 
-import com.avaje.ebean.Ebean;
 import com.google.common.io.Files;
 import models.Employee;
-import models.datamodel.*;
+import models.datamodel.Attachment;
+import models.datamodel.Project;
+import models.datamodel.Task;
+import models.datamodel.TaskProperties;
 import play.Logger;
 import play.data.Form;
 import play.data.validation.Constraints;
@@ -16,9 +18,7 @@ import views.html.dashboard.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static play.data.Form.form;
 
@@ -27,7 +27,7 @@ import static play.data.Form.form;
 public class Dashboard extends Controller {
 
     public static Result index() {
-        return ok(index.render(Employee.findByEmail(request().username()), new CreateTask().getAllProjectsNames()));
+        return ok(index.render(Employee.findByEmail(request().username()), Utils.getAllProjectsNames(), Utils.getAllAssignedTasks()));
     }
 
     public static Result createProject() {
@@ -37,8 +37,8 @@ public class Dashboard extends Controller {
     public static Result createTask() {
 
         return ok(createTask.render(Employee.findByEmail(request().username()), form(CreateTask.class),
-                CreateTask.getAllProjectsNames(), CreateTask.getAllTaskTypeNames(), CreateTask.getAllEmployeesNames(),
-                CreateTask.getAllTaskPrioritets()));
+                Utils.getAllProjectsNames(), Utils.getAllTaskTypeNames(), Utils.getAllEmployeesNames(),
+                Utils.getAllTaskPrioritets()));
     }
 
     public static Result saveProject() {
@@ -79,9 +79,8 @@ public class Dashboard extends Controller {
         Form<Dashboard.CreateTask> createTaskForm = form(Dashboard.CreateTask.class).bindFromRequest();
 
         if (createTaskForm.hasErrors()) {
-            CreateTask task = new CreateTask();
             return badRequest(createTask.render(Employee.findByEmail(request().username()), createTaskForm,
-                    task.getAllProjectsNames(), task.getAllTaskTypeNames(), task.getAllEmployeesNames(), task.getAllTaskPrioritets()));
+                    Utils.getAllProjectsNames(), Utils.getAllTaskTypeNames(), Utils.getAllEmployeesNames(), Utils.getAllTaskPrioritets()));
         }
 
         Dashboard.CreateTask createTaskFormFilled = createTaskForm.get();
@@ -95,20 +94,12 @@ public class Dashboard extends Controller {
             task.assigne = Employee.findByFullname(createTaskFormFilled.assigneFullName).id;
             task.projectId = Project.findByProjectName(createTaskFormFilled.projectName).getId();
             task.status = "Created";
-
             task.save();
             task.code = createTaskFormFilled.projectName + "-" + task.getId();
             task.save();
 
-            TaskProperties taskProperties = new TaskProperties();
-            taskProperties.deadline = createTaskFormFilled.deadline;
-            taskProperties.type = CreateTask.getTaskTypeId(createTaskFormFilled.issueType);
-            taskProperties.priority = createTaskFormFilled.priority;
-            taskProperties.reporter = Employee.findByEmail(request().username()).id;
-            taskProperties.taskId = task.getId();
-            taskProperties.save();
-
-            getAttachment(task);
+            task.setTaskProperties(getProperties(createTaskFormFilled, task));
+            task.setAttachment(getAttachment(task));
 
             return ok(taskCreated.render(Employee.findByEmail(request().username()), task.code));
         } catch (Exception e) {
@@ -119,19 +110,32 @@ public class Dashboard extends Controller {
         return badRequest();
     }
 
-    private static void getAttachment(Task task) throws IOException {
+    private static TaskProperties getProperties(CreateTask createTaskFormFilled, Task task) {
+        TaskProperties taskProperties = new TaskProperties();
+        taskProperties.deadline = createTaskFormFilled.deadline;
+        taskProperties.type = Utils.getTaskTypeId(createTaskFormFilled.issueType);
+        taskProperties.priority = createTaskFormFilled.priority;
+        taskProperties.reporter = Employee.findByEmail(request().username()).id;
+        taskProperties.taskId = task.getId();
+        taskProperties.save();
+        return taskProperties;
+    }
+
+    private static Attachment getAttachment(Task task) throws IOException {
 
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart file = body.getFile("file");
         if (file != null) {
 
-            Task.Attachment attachment = new Task.Attachment();
+            Attachment attachment = new Attachment();
             attachment.name = file.getFilename();
             attachment.content_type = file.getContentType();
             attachment.data = Files.toByteArray(file.getFile());
             attachment.taskId = task.getId();
             attachment.save();
+            return attachment;
         }
+        return null;
     }
 
     /**
@@ -195,55 +199,6 @@ public class Dashboard extends Controller {
         public String description;
         public Date deadline;
         public String assigneFullName;
-
-
-        public static List<String> getAllProjectsNames() {
-
-            List<String> projectNamesList = new ArrayList<>();
-            List<Project> projectsList = Project.find.all();
-            for (Project project : projectsList) {
-                projectNamesList.add(project.getName());
-            }
-            return projectNamesList;
-        }
-
-        public static List<String> getAllEmployeesNames() {
-
-            List<String> employeeNamesList = new ArrayList<>();
-            List<Employee> employeeList = Employee.find.all();
-            for (Employee employee : employeeList) {
-                employeeNamesList.add(employee.fullname);
-            }
-            return employeeNamesList;
-        }
-
-        public static List<String> getAllTaskTypeNames() {
-
-            List<String> taskTypesNamesList = new ArrayList<>();
-            List<TaskType> taskTypesList = TaskType.find.all();
-            for (TaskType taskType : taskTypesList) {
-                taskTypesNamesList.add(taskType.getType());
-            }
-            return taskTypesNamesList;
-        }
-
-        public static List<String> getAllTaskPrioritets() {
-
-            List<String> taskPrioritets = new ArrayList<>();
-            List<TaskPrioritets> taskPrioritetsList = TaskPrioritets.find.all();
-            for (TaskPrioritets taskPriority : taskPrioritetsList) {
-                taskPrioritets.add(taskPriority.getPriority());
-            }
-            return taskPrioritets;
-        }
-
-        public static int getTaskTypeId(String taskTypeName) {
-
-            TaskType taskType = Ebean.find(TaskType.class)
-                    .where()
-                    .eq("type", taskTypeName).findUnique();
-            return taskType.getId();
-        }
 
         /**
          * Validate the authentication.

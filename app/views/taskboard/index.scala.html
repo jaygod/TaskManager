@@ -1,4 +1,4 @@
-@(user: Employee)(taskProperties: models.datamodel.TaskProperties)(task: models.datamodel.Task)(attachment: models.datamodel.Task.Attachment)
+@(user: Employee)(task: models.datamodel.Task)
 
 @main(user) {
 
@@ -7,45 +7,112 @@
 
     <hr class="divider">
 
-    @*Details*@
-    <div class="panel panel-info taskPanel">
-        <div class="panel-heading">
-            <h3 class="panel-title">Details</h3>
+    <div class="row">
+        <div class="col-md-8">
+
+            @*Details*@
+            <div class="panel panel-info taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>Details</b></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-4">
+                        <b>Type: </b>
+                        @if(task.getTaskProperties().getTaskType.getType().equals("Bug")) {
+                            <i class="fa fa-bug blocker"></i>
+                        }
+                        @if(task.getTaskProperties().getTaskType.getType().equals("Task")) {
+                            <i class="fa fa-tasks minor"></i>
+                        }
+                        @if(task.getTaskProperties().getTaskType.getType().equals("Story")) {
+                            <i class="fa fa-newspaper-o story"></i>
+                        }
+                        @if(task.getTaskProperties().getTaskType.getType().equals("Technical task")) {
+                            <i class="fa fa-scissors technical_task"></i>
+                        }
+                        @if(task.getTaskProperties().getTaskType.getType().equals("New feature")) {
+                            <i class="fa fa-lightbulb-o major"></i>
+                        }
+                        @if(task.getTaskProperties().getTaskType.getType().equals("Improvment")) {
+                            <i class="fa fa-plus-square trivial"></i>
+                        }
+                        @task.getTaskProperties().getTaskType().getType() <br>
+
+                        <b>Priority: </b>
+                        @if(task.getTaskProperties().priority.equals("Trivial")) {
+                            <i class="fa fa-circle trivial"></i>
+                        }
+                        @if(task.getTaskProperties().priority.equals("Minor")) {
+                            <i class="fa fa-circle minor"></i>
+                        }
+                        @if(task.getTaskProperties().priority.equals("Major")) {
+                            <i class="fa fa-circle major"></i>
+                        }
+                        @if(task.getTaskProperties().priority.equals("Critical")) {
+                            <i class="fa fa-exclamation-circle critical"></i>
+                        }
+                        @if(task.getTaskProperties().priority.equals("Blocker")) {
+                            <i class="fa fa-minus-circle blocker"></i>
+                        }
+                        @task.getTaskProperties().priority <br>
+
+                        <b>Labels: </b>@task.labels <br>
+                    </div>
+                    <div class="col-md-4">
+                        <b>Status: </b>@task.status <br>
+                        <b>Resolution: </b>Unresolved <br>
+                    </div>
+                </div>
+            </div>
+
+            @*Description*@
+            <div class="panel panel-info taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>Description</b></h3>
+                </div>
+                <div class="panel-body">
+                @task.description
+                </div>
+            </div>
+
+            @*Attachments*@
+            <div class="panel panel-info taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>Attachments</b></h3>
+                </div>
+                @if(task.getAttachment() != (null)) {
+                    <div class="panel-body">
+                        <img alt="" src="@task.getAttachment().data"/>
+                    </div>
+                } else {
+                    <div class="panel-body">
+                        No attachments
+                    </div>
+                }
+            </div>
+
+            @*Comments*@
+            <div class="panel panel-info taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>Comments</b></h3>
+                </div>
+                <div class="panel-body">
+                    Tu będą komentarze
+                </div>
+            </div>
         </div>
-        <div class="panel-body">
-        @taskProperties.priority
-            @taskProperties.deadline
+
+        <div class="col-md-4">
+            @*People*@
+            <div class="panel panel-info taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>Dependents</b></h3>
+                </div>
+                <div class="panel-body">
+                    Tu będą komentarze
+                </div>
+            </div>
         </div>
     </div>
 
-    @*Description*@
-    <div class="panel panel-info taskPanel">
-        <div class="panel-heading">
-            <h3 class="panel-title">Description</h3>
-        </div>
-        <div class="panel-body">
-        @task.description
-        </div>
-    </div>
-
-    @*Attachments*@
-    <div class="panel panel-info taskPanel">
-        <div class="panel-heading">
-            <h3 class="panel-title">Attachments</h3>
-        </div>
-        <div class="panel-body">
-            <img alt=""  src="@attachment.data"/>
-        </div>
-    </div>
-
-
-    @*Comments*@
-    <div class="panel panel-info taskPanel">
-        <div class="panel-heading">
-            <h3 class="panel-title">Comments</h3>
-        </div>
-        <div class="panel-body">
-        Tu będą komentarze
-        </div>
-    </div>
 }
