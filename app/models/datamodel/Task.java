@@ -13,16 +13,18 @@ import java.util.List;
  * Created by Kuba on 2014-12-09.
  */
 @Entity
-@Table(name="\"task\"")
+@Table(name = "\"task\"")
 public class Task extends Model {
 
     private TaskProperties taskProperties;
     private Attachment attachment;
     private Employee assigned;
+    private List<Comment> commentsList;
+    private String projectName;
 
     @Id
     @Column(name = "id")
-    @SequenceGenerator(name="task_gen", sequenceName="task_id_seq", allocationSize=1)
+    @SequenceGenerator(name = "task_gen", sequenceName = "task_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_gen")
     private int id;
 
@@ -50,7 +52,6 @@ public class Task extends Model {
     @Constraints.Required
     public int assigne;
 
-
     public int getId() {
         return id;
     }
@@ -62,11 +63,9 @@ public class Task extends Model {
     }
 
     public static Task getTask(String code) {
-       Task task = Ebean.find(Task.class)
+        return Ebean.find(Task.class)
                 .where()
                 .eq("code", code).findUnique();
-
-        return task;
     }
 
     public void setTaskProperties(TaskProperties taskProperties) {
@@ -96,10 +95,30 @@ public class Task extends Model {
         this.assigned = assigned;
     }
 
-    public Employee getAssignedFromDatabase() {
-        Employee assigned = Ebean.find(Employee.class)
+    private Employee getAssignedFromDatabase() {
+        return Ebean.find(Employee.class)
                 .where()
                 .eq("id", this.assigne).findUnique();
-        return assigned;
+    }
+
+    public List<Comment> getCommentsList() {
+        if (commentsList == null) {
+            commentsList = getCommentsFromDatabase();
+        }
+        return commentsList;
+    }
+
+    private List<Comment> getCommentsFromDatabase() {
+        return Ebean.find(Comment.class)
+                .where()
+                .eq("task_id", this.id).order("addeddate").findList();
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }

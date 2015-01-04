@@ -85,3 +85,5 @@ mail.reset.fail.message=You (or someone else) entered this email address when tr
 
 mail.reset.confirm.subject=Task Manager - New password
 mail.reset.confirm.message=Hello, <br><br> Your password has been reset.
+
+task.has.been.reasigned=Task has been reassigned

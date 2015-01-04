@@ -1,8 +1,10 @@
 @(user: Employee)(task: models.datamodel.Task)(watchers: List[Employee])
 
 @main(user) {
+    @wflash()
 
-    <h4>@task.code</h4>
+    <h4> <a href="/task/@task.projectId" data-target="/task/@task.projectId/">@task.getProjectName()</a>
+        /  <a href="/task/@task.code" data-target="/task/@task.code/">@task.code</a></h4>
     <h2>@task.summary</h2>
 
     <hr class="divider">
@@ -92,12 +94,38 @@
             </div>
 
             @*Comments*@
-            <div class="panel panel-info taskPanel">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><b>Comments</b></h3>
-                </div>
-                <div class="panel-body">
-                    No comments yet
+            <div class="panel-group" id="accordion1">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion3" href="#collapseThree">
+                                <h3><b>Comments</b></h3>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                        @for(comment <- task.getCommentsList()) {
+                            <div class="panel-group" id="accordion2">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeOne">
+                                                @comment.getCommentAuthor().fullname
+                                                added a comment -
+                                                @comment.getAddeddate();
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseThreeOne" class="panel-collapse collapse in">
+                                        <div class="panel-body">@comment.getComment()</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -118,4 +118,11 @@ public class Utils extends Controller {
         return employeesList;
     }
 
+    public static String getProjectName(int projectId) {
+        Project project = Ebean.find(Project.class)
+                .where()
+                .eq("id", projectId).findUnique();
+
+        return project.getName();
+    }
 }
