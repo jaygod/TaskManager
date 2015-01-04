@@ -122,7 +122,7 @@ public class Dashboard extends Controller {
         taskProperties.deadline = createTaskFormFilled.deadline;
         taskProperties.type = Utils.getTaskTypeId(createTaskFormFilled.issueType);
         taskProperties.priority = createTaskFormFilled.priority;
-        taskProperties.reporter = Employee.findByEmail(request().username()).id;
+        taskProperties.reporterId = Employee.findByEmail(request().username()).id;
         taskProperties.taskId = task.getId();
         taskProperties.save();
         return taskProperties;

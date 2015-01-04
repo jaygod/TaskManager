@@ -1,4 +1,4 @@
-@(user: Employee)(task: models.datamodel.Task)
+@(user: Employee)(task: models.datamodel.Task)(watchers: List[Employee])
 
 @main(user) {
 
@@ -111,6 +111,20 @@
                 <div class="panel-body">
                     <b>Assigned: </b>
                     <a href="/user/@task.getAssigned().id" data-target="user/@task.getAssigned().id">@task.getAssigned().fullname</a>
+                    <a href="/task/@task.code/assign" data-target="/task/@task.code/" class="btn btn-info">Assign</a>
+
+                    <br>
+
+                    <b>Reporter: </b>
+                    <a href="/user/@task.getTaskProperties().getReporter().id" data-target="user/@task.getTaskProperties().getReporter().id">
+                    @task.getTaskProperties().getReporter().fullname</a>
+
+                    <br>
+
+                    <b>Watchers: </b>
+                    @for(watcher <- watchers) {
+                        <a href="/user/@watcher.id" data-target="user/@watcher.id">@watcher.fullname</a>
+                    }
                 </div>
             </div>
         </div>

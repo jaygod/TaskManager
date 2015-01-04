@@ -1,6 +1,7 @@
 package models.datamodel;
 
 import com.avaje.ebean.Ebean;
+import models.Employee;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class TaskProperties extends Model {
 
     private TaskType taskType;
+    private Employee reporter;
 
     @Id
     @Column(name = "id")
@@ -30,7 +32,7 @@ public class TaskProperties extends Model {
     public int type;
 
     @Constraints.Required
-    public int reporter;
+    public int reporterId;
 
     @Constraints.Required
     public String priority;
@@ -58,6 +60,11 @@ public class TaskProperties extends Model {
         TaskProperties properties = Ebean.find(TaskProperties.class)
                 .where()
                 .eq("task_id", taskId).findUnique();
+        Employee reporter = Ebean.find(Employee.class)
+                .where()
+                .eq("id", properties.reporterId).findUnique();
+
+        properties.setReporter(reporter);
 
         return properties;
     }
@@ -78,5 +85,13 @@ public class TaskProperties extends Model {
                 .where()
                 .eq("id", this.type).findUnique();
         return taskType;
+    }
+
+    public void setReporter(Employee reporter) {
+        this.reporter = reporter;
+    }
+
+    public Employee getReporter() {
+        return reporter;
     }
 }

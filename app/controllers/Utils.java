@@ -98,4 +98,24 @@ public class Utils extends Controller {
                 .eq("id", id).findUnique();
         return employee;
     }
+
+    public static Employee getEmployee(String assignName) {
+        Employee employee = Ebean.find(Employee.class)
+                .where()
+                .eq("fullname", assignName).findUnique();
+        return employee;
+    }
+
+    public static List<Employee> getAllTaskWatchers(int taskId) {
+        List<Watcher> watchersList = Ebean.find(Watcher.class)
+                .where()
+                .eq("task_id", taskId).findList();
+
+        List<Employee> employeesList = new ArrayList<>();
+        for(Watcher watcher : watchersList) {
+            employeesList.add(getEmployee(watcher.getUserId()));
+        }
+        return employeesList;
+    }
+
 }

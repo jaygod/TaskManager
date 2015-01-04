@@ -1,0 +1,48 @@
+@(user: Employee)(assignTaskForm: Form[TaskBoard.AssignTask])(task: models.datamodel.Task)(employeesNamesList: List[String])
+
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@form(action = controllers.routes.TaskBoard.assignTaskSave(task.code)) {
+
+    @main(user) {
+
+        @if(assignTaskForm.hasGlobalErrors) {
+            <p class="error">
+                <span class="label label-danger">@assignTaskForm.globalError.message</span>
+            </p>
+        }
+
+        <div class="panel panel-info assignPanel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><b>Assign task</b></h3>
+            </div>
+            <div class="panel-body">
+
+                <fieldset>
+                    Assign to: <br>
+                    @select(
+                        field = assignTaskForm("assignName"),
+                        options = options(employeesNamesList),
+                        '_label -> null
+                    )
+
+                    Add a comment:
+                    @inputText(
+                        assignTaskForm("comment"),
+                        'placeholder -> Messages(""),
+                        '_label -> null,
+                        'class -> "form-control"
+                    )
+                </fieldset>
+                <div class="container buttonSingup">
+                    <div class="form-actions">
+                        <input type="submit" class="btn btn-primary" value="Assign">
+                        <a href="/task/@task.code" type="button" class="btn btn-info" data-target="/task/@task.code">
+                            Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

@@ -18,8 +18,8 @@ POST        /createtask                   controllers.Dashboard.saveTask()
 
 #TaskBoard
 GET         /task/:code                   controllers.TaskBoard.index(code: String)
-
-
+GET         /task/:code/assign            controllers.TaskBoard.assignTask(code: String)
+POST        /task/:code/assign            controllers.TaskBoard.assignTaskSave(code: String)
 # Login Page
 GET         /login                        controllers.Application.login()
 POST        /login                        controllers.Application.authenticate()
