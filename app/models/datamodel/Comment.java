@@ -35,8 +35,6 @@ public class Comment extends Model {
     private String comment;
 
     @Constraints.Required
-    private Date added;
-
     private Timestamp addeddate;
 
     public static Finder<Integer, Comment> find = new Finder<Integer, Comment>(Integer.class, Comment.class);
@@ -80,14 +78,6 @@ public class Comment extends Model {
         return Ebean.find(Employee.class)
                 .where()
                 .eq("id", this.userId).findUnique();
-    }
-
-    public Date getAdded() {
-        return added;
-    }
-
-    public void setAdded(Date added) {
-        this.added = added;
     }
 
     public Timestamp getAddeddate() {

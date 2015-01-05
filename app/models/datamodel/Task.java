@@ -1,6 +1,7 @@
 package models.datamodel;
 
 import com.avaje.ebean.Ebean;
+import controllers.Utils;
 import models.Employee;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
@@ -20,7 +21,6 @@ public class Task extends Model {
     private Attachment attachment;
     private Employee assigned;
     private List<Comment> commentsList;
-    private String projectName;
 
     @Id
     @Column(name = "id")
@@ -109,16 +109,13 @@ public class Task extends Model {
     }
 
     private List<Comment> getCommentsFromDatabase() {
-        return Ebean.find(Comment.class)
+        List<Comment> cl = Ebean.find(Comment.class)
                 .where()
-                .eq("task_id", this.id).order("addeddate").findList();
+                .eq("task_id", this.id).orderBy("addeddate asc").findList();
+        return cl;
     }
 
     public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+        return Utils.getProjectName(this.projectId);
     }
 }

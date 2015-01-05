@@ -1,20 +1,17 @@
 package controllers;
 
 import models.Employee;
-import models.datamodel.Attachment;
-import models.datamodel.Comment;
-import models.datamodel.Task;
-import models.datamodel.TaskProperties;
+import models.datamodel.*;
+import org.springframework.util.CollectionUtils;
 import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.taskboard.assignTask;
-import views.html.taskboard.index;
+import views.html.taskboard.*;
 
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -35,7 +32,6 @@ public class TaskBoard extends Controller {
         task.setTaskProperties(taskProperties);
         task.getAssigned();
         task.getCommentsList();
-        task.setProjectName(Utils.getProjectName(task.projectId));
 
         List<Employee> watchersList = Utils.getAllTaskWatchers(task.getId());
 
@@ -59,21 +55,96 @@ public class TaskBoard extends Controller {
 
         TaskBoard.AssignTask assignTaskFormFilled = assignTaskForm.get();
         if (assignTaskFormFilled.comment != null) {
-            Comment comment = new Comment();
-            comment.setUserId(Employee.findByEmail(request().username()).id);
-            comment.setTaskId(task.getId());
-
-            comment.setComment(assignTaskFormFilled.comment);
-            comment.setAdded(new Date(System.currentTimeMillis())); //TODO remove that pice of shit
-            comment.setAddeddate(new Timestamp(System.currentTimeMillis()));
-            comment.save();
-            task.getCommentsList().add(comment);
+            addNewComment(task, assignTaskFormFilled.comment);
         }
 
         task.assigne = Utils.getEmployee(assignTaskFormFilled.assignName).id;
         task.save();
         flash("success", Messages.get("task.has.been.reasigned"));
         return index(code);
+    }
+
+    public static Result addWatcher(String code) {
+        Task task = Task.getTask(code);
+        List<String> watchersNamesList = getWatcherNamesList(task);
+        return ok(addWatcher.render(Employee.findByEmail(request().username()), form(AddWatcher.class), task, watchersNamesList));
+    }
+
+    public static Result addWatcherSave(String code) {
+
+        Form<TaskBoard.AddWatcher> addWatcherForm = form(TaskBoard.AddWatcher.class).bindFromRequest();
+        Task task = Task.getTask(code);
+
+        if (addWatcherForm.hasErrors()) {
+            List<String> watchersNamesList = getWatcherNamesList(task);
+            return badRequest(addWatcher.render(Employee.findByEmail(request().username()), form(AddWatcher.class), task, watchersNamesList));
+        }
+
+        TaskBoard.AddWatcher addWatcherFormFilled = addWatcherForm.get();
+        Employee watcher = Utils.getEmployee(addWatcherFormFilled.watcherName);
+
+        Watcher taskWatcher = new Watcher();
+        taskWatcher.setTaskId(task.getId());
+        taskWatcher.setUserId(watcher.id);
+        taskWatcher.save();
+
+        flash("success", Messages.get("watcher.has.been.added"));
+        return index(code);
+    }
+
+    private static List<String> getWatcherNamesList(Task task) {
+        List<Employee> employeesList = Employee.all();
+        List<Employee> watchersList = Utils.getAllTaskWatchers(task.getId());
+        employeesList.removeAll(watchersList);
+        List<String> watchersNamesList = new ArrayList<>();
+        for (Employee employee : employeesList) {
+            watchersNamesList.add(employee.fullname);
+        }
+        return watchersNamesList;
+    }
+
+    public static Result getImage(String code, long id) {
+        Attachment attachment = Utils.getAttachment(id);
+
+        return ok(showImage.render(Employee.findByEmail(request().username()), code, attachment.getImageData()));
+    }
+
+    public static Result deleteWatcher(String taskCode, long watcherId) {
+        Utils.deleteWatcher(watcherId);
+        flash("success", Messages.get("watcher.has.been.removed"));
+        return index(taskCode);
+    }
+
+    public static Result addComment(String taskCode) {
+        Task task = Task.getTask(taskCode);
+        return ok(newComment.render(Employee.findByEmail(request().username()), form(NewComment.class), task));
+    }
+
+    public static Result newCommentSave(String taskCode) {
+        Form<TaskBoard.NewComment> newCommentForm = form(TaskBoard.NewComment.class).bindFromRequest();
+        Task task = Task.getTask(taskCode);
+
+        if (newCommentForm.hasErrors()) {
+            return badRequest(newComment.render(Employee.findByEmail(request().username()), form(NewComment.class), task));
+        }
+
+        TaskBoard.NewComment newCommentFormFilled = newCommentForm.get();
+
+        addNewComment(task, newCommentFormFilled.comment);
+
+        flash("success", Messages.get("comment.has.been.added"));
+        return index(taskCode);
+    }
+
+    private static void addNewComment(Task task, String commentBody) {
+        Comment comment = new Comment();
+        comment.setUserId(Employee.findByEmail(request().username()).id);
+        comment.setTaskId(task.getId());
+
+        comment.setComment(commentBody);
+        comment.setAddeddate(new Timestamp(System.currentTimeMillis()));
+        comment.save();
+        task.getCommentsList().add(comment);
     }
 
     /**
@@ -92,6 +163,56 @@ public class TaskBoard extends Controller {
         public String validate() {
             if (isBlank(assignName)) {
                 return "You must select a person to assign a task";
+            }
+
+            return null;
+        }
+
+        private boolean isBlank(String input) {
+            return input == null || input.isEmpty() || input.trim().isEmpty();
+        }
+    }
+
+    /**
+     * AddWatcher class used by AddWatcher Form.
+     */
+    public static class AddWatcher {
+
+        public String watcherName;
+
+        /**
+         * Validate the authentication.
+         *
+         * @return null if validation ok, string with details otherwise
+         */
+        public String validate() {
+            if (isBlank(watcherName)) {
+                return "You must select a person to add new watcher";
+            }
+
+            return null;
+        }
+
+        private boolean isBlank(String input) {
+            return input == null || input.isEmpty() || input.trim().isEmpty();
+        }
+    }
+
+    /**
+     * NewComment class used by NewComment Form.
+     */
+    public static class NewComment {
+
+        public String comment;
+
+        /**
+         * Validate the authentication.
+         *
+         * @return null if validation ok, string with details otherwise
+         */
+        public String validate() {
+            if (isBlank(comment)) {
+                return "You must enter a comment";
             }
 
             return null;

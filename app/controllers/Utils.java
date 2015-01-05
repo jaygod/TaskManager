@@ -3,8 +3,12 @@ package controllers;
 import com.avaje.ebean.Ebean;
 import models.Employee;
 import models.datamodel.*;
+import play.Logger;
+import play.i18n.Messages;
 import play.mvc.Controller;
+import sun.misc.BASE64Encoder;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,4 +129,38 @@ public class Utils extends Controller {
 
         return project.getName();
     }
+
+    public static Attachment getAttachment(long id) {
+        Attachment attachment = Ebean.find(Attachment.class)
+                .where()
+                .eq("id", id).findUnique();
+
+        return attachment;
+
+    }
+
+    public static void deleteWatcher(long watcherId) {
+        Watcher watcher = Ebean.find(Watcher.class)
+                .where()
+                .eq("user_id", watcherId).findUnique();
+        Ebean.delete(Watcher.class, watcher.getId());
+    }
+
+    public static byte[] imageToByte(File file) throws FileNotFoundException {
+        FileInputStream fis = new FileInputStream(file);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        byte[] buf = new byte[1024];
+        try {
+            for (int readNum; (readNum = fis.read(buf)) != -1;) {
+                bos.write(buf, 0, readNum);
+            }
+        } catch (IOException ex) {
+            Logger.error("Utils.imageToByte error", ex);
+            flash("error", Messages.get("error.technical"));
+        }
+        byte[] bytes = bos.toByteArray();
+
+        return bytes;
+    }
+
 }

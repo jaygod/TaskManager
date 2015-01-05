@@ -21,7 +21,7 @@ public class Attachment extends Model {
     public int taskId;
 
     @Constraints.Required
-    public byte[] data;
+    private byte[] data;
 
     @Constraints.Required
     public String name;
@@ -48,5 +48,15 @@ public class Attachment extends Model {
                 .eq("task_id", taskId).findUnique();
 
         return attachment;
+    }
+
+    public String getImageData() {
+        sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+        String encode = encoder.encode(data);
+        return encode;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 }

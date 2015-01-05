@@ -84,7 +84,12 @@
                 </div>
                 @if(task.getAttachment() != (null)) {
                     <div class="panel-body">
-                        <img alt="" src="@task.getAttachment().data"/>
+                        <a href="/task/@task.code/image/@task.getAttachment.getId()" id="image" onclick="/task/@task.code/image/@task.getAttachment.getId()">
+                            <img class="image" src="data:image/jpeg;base64,@task.getAttachment().getImageData()" alt="@task.getAttachment.name"
+                               style="width:30%;height:30%"/>
+                        </a>
+                        <br>
+                        <a href="/task/@task.code/image/@task.getAttachment.getId()" data-target="/task/@task.code/image/@task.getAttachment.getId()">@task.getAttachment.name</a>
                     </div>
                 } else {
                     <div class="panel-body">
@@ -94,68 +99,69 @@
             </div>
 
             @*Comments*@
-            <div class="panel-group" id="accordion1">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion3" href="#collapseThree">
-                                <h3><b>Comments</b></h3>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseThree" class="panel-collapse collapse in">
-                        <div class="panel-body">
-                        @for(comment <- task.getCommentsList()) {
-                            <div class="panel-group" id="accordion2">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeOne">
-                                                @comment.getCommentAuthor().fullname
-                                                added a comment -
-                                                @comment.getAddeddate();
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapseThreeOne" class="panel-collapse collapse in">
-                                        <div class="panel-body">@comment.getComment()</div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            @*People*@
             <div class="panel panel-info taskPanel">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><b>Dependents</b></h3>
+                    <h3 class="panel-title"><b>Comments</b>
+                        <a href="/task/@task.code/addcomment" data-target="/task/@task.code/addcomment" class="btn btn-sm btn-default assignButton">
+                            Add comment</a>
+                    </h3>
                 </div>
-                <div class="panel-body">
-                    <b>Assigned: </b>
-                    <a href="/user/@task.getAssigned().id" data-target="user/@task.getAssigned().id">@task.getAssigned().fullname</a>
-                    <a href="/task/@task.code/assign" data-target="/task/@task.code/" class="btn btn-info">Assign</a>
-
-                    <br>
-
-                    <b>Reporter: </b>
-                    <a href="/user/@task.getTaskProperties().getReporter().id" data-target="user/@task.getTaskProperties().getReporter().id">
-                    @task.getTaskProperties().getReporter().fullname</a>
-
-                    <br>
-
-                    <b>Watchers: </b>
-                    @for(watcher <- watchers) {
-                        <a href="/user/@watcher.id" data-target="user/@watcher.id">@watcher.fullname</a>
+                @if(task.getCommentsList().size() != 0) {
+                    @for((comment, index) <- task.getCommentsList().zipWithIndex) {
+                        <div class="panel-body">
+                            @if(task.getCommentsList().size() - 1 == index) {
+                                <div class="panel panel-info">
+                                } else {
+                                <div class="panel panel-default">
+                                }
+                                    <div class="panel-heading">
+                                        <div class="panel-title">
+                                            @comment.getCommentAuthor().fullname
+                                            added a comment -
+                                            @comment.getAddeddate()
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">@comment.getComment()</div>
+                                </div>
+                                </div>
+                        </div>
                     }
-                </div>
+
+                }
+
+            </div>
+
+        </div>
+    <div class="col-md-4">
+        @*People*@
+        <div class="panel panel-info taskPanel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><b>Dependents</b></h3>
+            </div>
+            <div class="panel-body">
+                <b>Assigned: </b>
+                <a href="/user/@task.getAssigned().id" data-target="user/@task.getAssigned().id">@task.getAssigned().fullname</a>
+                <a href="/task/@task.code/assign" data-target="/task/@task.code/" class="btn btn-sm btn-default assignButton">Assign</a>
+
+                <br>
+
+                <b>Reporter: </b>
+                <a href="/user/@task.getTaskProperties().getReporter().id" data-target="user/@task.getTaskProperties().getReporter().id">
+                @task.getTaskProperties().getReporter().fullname</a>
+
+                <br>
+
+                <b>Watchers: </b>
+                @for(watcher <- watchers) {
+                    <a href="/user/@watcher.id" data-target="user/@watcher.id">@watcher.fullname</a>
+                    <a href="/task/@task.code/deletewatcher/@watcher.id" class="icon-block">
+                        <i class="fa fa-times deleteCross"></i>
+                    </a>
+                }
+                <a href="/task/@task.code/addwatcher" data-target="/task/@task.code/addwatcher" class="btn btn-sm btn-default addWatcherButton">Add Watcher</a>
             </div>
         </div>
+    </div>
     </div>
 
 }

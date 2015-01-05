@@ -87,3 +87,6 @@ mail.reset.confirm.subject=Task Manager - New password
 mail.reset.confirm.message=Hello, <br><br> Your password has been reset.
 
 task.has.been.reasigned=Task has been reassigned
+comment.has.been.added=New comment added
+watcher.has.been.added=New watcher has been added
+watcher.has.been.removed=Watcher has been removed

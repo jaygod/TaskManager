@@ -1,42 +1,33 @@
-@(user: Employee)(assignTaskForm: Form[TaskBoard.AssignTask])(task: models.datamodel.Task)(employeesNamesList: List[String])
-
+@(user: Employee)(newCommentForm: Form[TaskBoard.NewComment])(task: models.datamodel.Task)
 @import helper._
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
-@form(action = controllers.routes.TaskBoard.assignTaskSave(task.code)) {
+@form(action = controllers.routes.TaskBoard.newCommentSave(task.code)) {
 
     @main(user) {
 
-        @if(assignTaskForm.hasGlobalErrors) {
+        @if(newCommentForm.hasGlobalErrors) {
             <p class="error">
-                <span class="label label-danger">@assignTaskForm.globalError.message</span>
+                <span class="label label-danger">@newCommentForm.globalError.message</span>
             </p>
         }
 
         <div class="panel panel-info assignPanel">
             <div class="panel-heading">
-                <h3 class="panel-title"><b>Assign task</b></h3>
+                <h3 class="panel-title"><b>New comment</b></h3>
             </div>
             <div class="panel-body">
-
                 <fieldset>
-                    Assign to: <br>
-                    @select(
-                        field = assignTaskForm("assignName"),
-                        options = options(employeesNamesList),
-                        '_label -> null
-                    )
-
                     Add a comment:
                     @inputText(
-                        assignTaskForm("comment"),
+                        newCommentForm("comment"),
                         'placeholder -> Messages(""),
                         '_label -> null,
                         'class -> "form-control"
                     )
                 </fieldset>
                 <div class="form-actions">
-                    <input type="submit" class="btn btn-primary" value="Assign">
+                    <input type="submit" class="btn btn-primary" value="Add comment">
                     <a href="/task/@task.code" type="button" class="btn btn-info menuButtons" data-target="/task/@task.code">
                         Back</a>
                 </div>

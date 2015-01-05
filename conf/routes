@@ -3,56 +3,63 @@
 # ~~~~
 
 # Global
-GET         /getProjects                  controllers.Application.getAllProjects()
+GET         /getProjects                         controllers.Application.getAllProjects()
 
 
 # Home page
-GET         /                             controllers.Application.index()
-GET         /dashboard                    controllers.Dashboard.index()
+GET         /                                    controllers.Application.index()
+GET         /dashboard                           controllers.Dashboard.index()
 
 #Dashboard
-GET         /createproject                controllers.Dashboard.createProject()
-POST        /createproject                controllers.Dashboard.saveProject()
-GET         /createtask                   controllers.Dashboard.createTask()
-POST        /createtask                   controllers.Dashboard.saveTask()
+GET         /createproject                       controllers.Dashboard.createProject()
+POST        /createproject                       controllers.Dashboard.saveProject()
+GET         /createtask                          controllers.Dashboard.createTask()
+POST        /createtask                          controllers.Dashboard.saveTask()
 
 #TaskBoard
-GET         /task/:code                   controllers.TaskBoard.index(code: String)
-GET         /task/:code/assign            controllers.TaskBoard.assignTask(code: String)
-POST        /task/:code/assign            controllers.TaskBoard.assignTaskSave(code: String)
+GET         /task/:code                          controllers.TaskBoard.index(code: String)
+GET         /task/:code/assign                   controllers.TaskBoard.assignTask(code: String)
+POST        /task/:code/assign                   controllers.TaskBoard.assignTaskSave(code: String)
+GET         /task/:code/image/:id                controllers.TaskBoard.getImage(code: String, id: Long)
+GET         /task/:code/addwatcher               controllers.TaskBoard.addWatcher(code: String)
+POST        /task/:code/addwatcher               controllers.TaskBoard.addWatcherSave(code: String)
+GET         /task/:code/deletewatcher/:id        controllers.TaskBoard.deleteWatcher(code: String, id: Long)
+GET         /task/:code/addcomment               controllers.TaskBoard.addComment(code: String)
+POST        /task/:code/addcomment               controllers.TaskBoard.newCommentSave(code: String)
+
 # Login Page
-GET         /login                        controllers.Application.login()
-POST        /login                        controllers.Application.authenticate()
-GET         /logout                       controllers.Application.logout()
+GET         /login                               controllers.Application.login()
+POST        /login                               controllers.Application.authenticate()
+GET         /logout                              controllers.Application.logout()
 
 # UserPage
-GET         /user/:id                     controllers.Dashboard.userPage(id: Long)
+GET         /user/:id                            controllers.Dashboard.userPage(id: Long)
 
 # Settings
-GET         /settings                     controllers.account.settings.Index.index()
-GET         /settings/password            controllers.account.settings.Password.index()
-POST        /settings/password            controllers.account.settings.Password.runPassword()
-GET         /settings/email               controllers.account.settings.Email.index()
-POST        /settings/email               controllers.account.settings.Email.runEmail()
+GET         /settings                            controllers.account.settings.Index.index()
+GET         /settings/password                   controllers.account.settings.Password.index()
+POST        /settings/password                   controllers.account.settings.Password.runPassword()
+GET         /settings/email                      controllers.account.settings.Email.index()
+POST        /settings/email                      controllers.account.settings.Email.runEmail()
 
 # Registers the user, sending an email to confirm the account.
-GET         /singup                       controllers.Application.singUp()
+GET         /singup                              controllers.Application.singUp()
 #GET         /signup                       controllers.account.Signup.create()
-POST        /signup                       controllers.account.Signup.save()
+POST        /signup                              controllers.account.Signup.save()
 
 # Accessed when the user confirms the registration.
-GET         /confirm/:confirmToken        controllers.account.Signup.confirm(confirmToken:String)
+GET         /confirm/:confirmToken               controllers.account.Signup.confirm(confirmToken:String)
 
 # Displays a page to send a reset email given the user's email.
-GET         /reset/ask                    controllers.account.Reset.ask()
-POST        /reset/ask                    controllers.account.Reset.runAsk()
+GET         /reset/ask                           controllers.account.Reset.ask()
+POST        /reset/ask                           controllers.account.Reset.runAsk()
 
 # Resets the password using the password.
-GET         /reset/:token                 controllers.account.Reset.reset(token:String)
-POST        /reset/:token                 controllers.account.Reset.runReset(token:String)
+GET         /reset/:token                        controllers.account.Reset.reset(token:String)
+POST        /reset/:token                        controllers.account.Reset.runReset(token:String)
 
-GET         /email/:token                 controllers.account.settings.Email.validateEmail(token:String)
+GET         /email/:token                        controllers.account.settings.Email.validateEmail(token:String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                 controllers.Assets.at(path="/public", file)
+GET         /assets/*file                        controllers.Assets.at(path="/public", file)
 

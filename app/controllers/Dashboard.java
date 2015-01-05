@@ -137,7 +137,7 @@ public class Dashboard extends Controller {
             Attachment attachment = new Attachment();
             attachment.name = file.getFilename();
             attachment.content_type = file.getContentType();
-            attachment.data = Files.toByteArray(file.getFile());
+            attachment.setData(Utils.imageToByte(file.getFile()));
             attachment.taskId = task.getId();
             attachment.save();
             return attachment;
