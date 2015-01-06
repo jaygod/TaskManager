@@ -58,6 +58,22 @@ public class TimeTracking extends Model {
         return Math.round((float) remainingTime / estimatedTime * 100);
     }
 
+    public float getOverTimePercent() {
+        int whole = 10;
+        if (-remainingTime < 10) {
+            whole = 10;
+        } else if (-remainingTime < 20) {
+            whole = 20;
+        } else if (-remainingTime < 30) {
+            whole = 30;
+        } else if (-remainingTime < 50) {
+            whole = 50;
+        } else {
+            whole = 100;
+        }
+        return Math.round((float) -remainingTime/whole * 100);
+    }
+
     public void setRemainingTime(int remainingTime) {
         this.remainingTime = remainingTime;
     }

@@ -150,9 +150,7 @@ public class TaskBoard extends Controller {
     public static Result logWork(String taskCode) {
         Task task = Task.getTask(taskCode);
         List<String> availableLogDaysList = new ArrayList<>();
-        for (int i = 0; i < 30; ++i) {
-            availableLogDaysList.add(i + "");
-        }
+        getAvaiableLogDaysList(availableLogDaysList);
         return ok(logWork.render(Employee.findByEmail(request().username()), form(LogWork.class), task, availableLogDaysList));
     }
 
@@ -162,9 +160,7 @@ public class TaskBoard extends Controller {
 
         if (logWorktForm.hasErrors()) {
             List<String> availableLogDaysList = new ArrayList<>();
-            for (int i = 0; i < 30; ++i) {
-                availableLogDaysList.add(i + "");
-            }
+            getAvaiableLogDaysList(availableLogDaysList);
             return badRequest(logWork.render(Employee.findByEmail(request().username()), form(LogWork.class), task, availableLogDaysList));
         }
 
@@ -276,6 +272,13 @@ public class TaskBoard extends Controller {
 
         private boolean isBlank(String input) {
             return input == null || input.isEmpty() || input.trim().isEmpty();
+        }
+    }
+
+
+    private static void getAvaiableLogDaysList(List<String> availableLogDaysList) {
+        for (int i = 0; i < 30; ++i) {
+            availableLogDaysList.add(i+1 + "");
         }
     }
 

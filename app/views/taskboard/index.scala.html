@@ -184,7 +184,12 @@
 
                 <b>Remaining: </b>
                 <div class="progress">
-                    <div class="progress-bar progress-bar-warning" style="width: @task.getTimeTracking().getRemainingTimePercent()%;">@task.getTimeTracking().getRemainingTime() day(s)</div>
+                    @if(task.getTimeTracking().getRemainingTimePercent() < 0) {
+                        <div class="progress-bar progress-bar-danger" style="width: @task.getTimeTracking().getOverTimePercent()%;">@task.getTimeTracking().getRemainingTime() day(s) over</div>
+                    } else {
+                        <div class="progress-bar progress-bar-warning" style="width: @task.getTimeTracking().getRemainingTimePercent()%;">@task.getTimeTracking().getRemainingTime()
+                            day(s)</div>
+                    }
                 </div>
                 <a href="/task/@task.code/logwork" data-target="/task/@task.code/logwork" class="btn btn-sm btn-default assignButton">Log work</a>
             </div>
