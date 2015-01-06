@@ -2,7 +2,6 @@ package controllers;
 
 import models.Employee;
 import models.datamodel.*;
-import org.springframework.util.CollectionUtils;
 import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Controller;
@@ -32,6 +31,7 @@ public class TaskBoard extends Controller {
         task.setTaskProperties(taskProperties);
         task.getAssigned();
         task.getCommentsList();
+        task.getTimeTracking();
 
         List<Employee> watchersList = Utils.getAllTaskWatchers(task.getId());
 
@@ -147,6 +147,37 @@ public class TaskBoard extends Controller {
         task.getCommentsList().add(comment);
     }
 
+    public static Result logWork(String taskCode) {
+        Task task = Task.getTask(taskCode);
+        List<String> availableLogDaysList = new ArrayList<>();
+        for (int i = 0; i < 30; ++i) {
+            availableLogDaysList.add(i + "");
+        }
+        return ok(logWork.render(Employee.findByEmail(request().username()), form(LogWork.class), task, availableLogDaysList));
+    }
+
+    public static Result logWorkSave(String taskCode) {
+        Form<TaskBoard.LogWork> logWorktForm = form(TaskBoard.LogWork.class).bindFromRequest();
+        Task task = Task.getTask(taskCode);
+
+        if (logWorktForm.hasErrors()) {
+            List<String> availableLogDaysList = new ArrayList<>();
+            for (int i = 0; i < 30; ++i) {
+                availableLogDaysList.add(i + "");
+            }
+            return badRequest(logWork.render(Employee.findByEmail(request().username()), form(LogWork.class), task, availableLogDaysList));
+        }
+
+        TaskBoard.LogWork logWorkFormFilled = logWorktForm.get();
+
+        TimeTracking timeTracking = task.getTimeTracking();
+        timeTracking.setRemainingTime(timeTracking.getRemainingTime() - Integer.parseInt(logWorkFormFilled.timeSpent));
+        timeTracking.save();
+
+        flash("success", Messages.get("work.log.adjusted"));
+        return index(taskCode);
+    }
+
     /**
      * AssignTask class used by AssignTask Form.
      */
@@ -223,5 +254,29 @@ public class TaskBoard extends Controller {
         }
     }
 
+    /**
+     * LogWork class used by LogWork Form.
+     */
+    public static class LogWork {
+
+        public String timeSpent;
+
+        /**
+         * Validate the authentication.
+         *
+         * @return null if validation ok, string with details otherwise
+         */
+        public String validate() {
+            if (isBlank(timeSpent)) {
+                return "You must enter a time spent on task";
+            }
+
+            return null;
+        }
+
+        private boolean isBlank(String input) {
+            return input == null || input.isEmpty() || input.trim().isEmpty();
+        }
+    }
 
 }

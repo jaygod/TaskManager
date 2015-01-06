@@ -26,6 +26,8 @@ POST        /task/:code/addwatcher               controllers.TaskBoard.addWatche
 GET         /task/:code/deletewatcher/:id        controllers.TaskBoard.deleteWatcher(code: String, id: Long)
 GET         /task/:code/addcomment               controllers.TaskBoard.addComment(code: String)
 POST        /task/:code/addcomment               controllers.TaskBoard.newCommentSave(code: String)
+GET         /task/:code/logwork                  controllers.TaskBoard.logWork(code: String)
+POST        /task/:code/logwork                  controllers.TaskBoard.logWorkSave(code: String)
 
 # Login Page
 GET         /login                               controllers.Application.login()
@@ -33,7 +35,7 @@ POST        /login                               controllers.Application.authent
 GET         /logout                              controllers.Application.logout()
 
 # UserPage
-GET         /user/:id                            controllers.Dashboard.userPage(id: Long)
+GET         /task/:code/user/:id                 controllers.Dashboard.userPage(code: String, id: Long)
 
 # Settings
 GET         /settings                            controllers.account.settings.Index.index()

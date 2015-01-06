@@ -21,6 +21,7 @@ public class Task extends Model {
     private Attachment attachment;
     private Employee assigned;
     private List<Comment> commentsList;
+    private TimeTracking timeTracking;
 
     @Id
     @Column(name = "id")
@@ -76,6 +77,10 @@ public class Task extends Model {
         this.attachment = attachment;
     }
 
+    public void setTimeTracking(TimeTracking timeTracking) {
+        this.timeTracking = timeTracking;
+    }
+
     public TaskProperties getTaskProperties() {
         return taskProperties;
     }
@@ -109,13 +114,25 @@ public class Task extends Model {
     }
 
     private List<Comment> getCommentsFromDatabase() {
-        List<Comment> cl = Ebean.find(Comment.class)
+        return Ebean.find(Comment.class)
                 .where()
                 .eq("task_id", this.id).orderBy("addeddate asc").findList();
-        return cl;
     }
 
     public String getProjectName() {
         return Utils.getProjectName(this.projectId);
+    }
+
+    public TimeTracking getTimeTracking() {
+        if (timeTracking == null) {
+            timeTracking = getTimeTrackingFromDatabase();
+        }
+        return timeTracking;
+    }
+
+    public TimeTracking getTimeTrackingFromDatabase() {
+        return Ebean.find(TimeTracking.class)
+                .where()
+                .eq("task_id", this.id).findUnique();
     }
 }

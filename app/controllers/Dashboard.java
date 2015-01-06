@@ -2,10 +2,7 @@ package controllers;
 
 import com.google.common.io.Files;
 import models.Employee;
-import models.datamodel.Attachment;
-import models.datamodel.Project;
-import models.datamodel.Task;
-import models.datamodel.TaskProperties;
+import models.datamodel.*;
 import play.Logger;
 import play.data.Form;
 import play.data.validation.Constraints;
@@ -31,9 +28,9 @@ public class Dashboard extends Controller {
         return ok(index.render(Employee.findByEmail(request().username()), Utils.getAllProjectsNames(), Utils.getAllAssignedTasks()));
     }
 
-    public static Result userPage(long id) {
+    public static Result userPage(String code, long id) {
         Employee employee = Utils.getEmployee(id);
-        return ok(userPage.render(Employee.findByEmail(request().username()), employee));
+        return ok(userPage.render(Employee.findByEmail(request().username()), employee, code));
     }
 
 
@@ -107,6 +104,7 @@ public class Dashboard extends Controller {
 
             task.setTaskProperties(getProperties(createTaskFormFilled, task));
             task.setAttachment(getAttachment(task));
+            task.setTimeTracking(getTimeTracking(createTaskFormFilled,task));
 
             return ok(taskCreated.render(Employee.findByEmail(request().username()), task.code));
         } catch (Exception e) {
@@ -143,6 +141,15 @@ public class Dashboard extends Controller {
             return attachment;
         }
         return null;
+    }
+
+    private static TimeTracking getTimeTracking(CreateTask createTaskFormFilled, Task task) {
+        TimeTracking timeTracking = new TimeTracking();
+        timeTracking.setEstimatedTime(createTaskFormFilled.estimatedTime);
+        timeTracking.setRemainingTime(timeTracking.getEstimatedTime());
+        timeTracking.setTaskId(task.getId());
+        timeTracking.save();
+        return timeTracking;
     }
 
     /**
@@ -206,6 +213,7 @@ public class Dashboard extends Controller {
         public String description;
         public Date deadline;
         public String assigneFullName;
+        public int estimatedTime = 0;
 
         /**
          * Validate the authentication.
@@ -218,6 +226,9 @@ public class Dashboard extends Controller {
             }
             if (isBlank(description)) {
                 return "Description is required";
+            }
+            if (estimatedTime == 0) {
+                return "Estimated Time is required";
             }
 
             return null;

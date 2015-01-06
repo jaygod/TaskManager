@@ -1,0 +1,37 @@
+@(user: Employee)(logWorkForm: Form[TaskBoard.LogWork])(task: models.datamodel.Task)(daysSpentOnTask: List[String])
+
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@form(action = controllers.routes.TaskBoard.logWorkSave(task.code)) {
+
+    @main(user) {
+
+        @if(logWorkForm.hasGlobalErrors) {
+            <p class="error">
+                <span class="label label-danger">@logWorkForm.globalError.message</span>
+            </p>
+        }
+
+        <div class="panel panel-info assignPanel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><b>Log work</b></h3>
+            </div>
+            <div class="panel-body">
+                <fieldset>
+                    Time spent: <br>
+                    @select(
+                        field = logWorkForm("timeSpent"),
+                        options = options(daysSpentOnTask),
+                        '_label -> null
+                    )
+                </fieldset>
+                <div class="form-actions">
+                    <input type="submit" class="btn btn-primary" value="Log">
+                    <a href="/task/@task.code" type="button" class="btn btn-info menuButtons" data-target="/task/@task.code">
+                        Back</a>
+                </div>
+            </div>
+        </div>
+    }
+}

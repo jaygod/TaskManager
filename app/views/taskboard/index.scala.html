@@ -101,34 +101,43 @@
             @*Comments*@
             <div class="panel panel-info taskPanel">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><b>Comments</b>
-                        <a href="/task/@task.code/addcomment" data-target="/task/@task.code/addcomment" class="btn btn-sm btn-default assignButton">
-                            Add comment</a>
-                    </h3>
+                    <h3 class="panel-title"><b>Comments</b></h3>
                 </div>
                 @if(task.getCommentsList().size() != 0) {
                     @for((comment, index) <- task.getCommentsList().zipWithIndex) {
                         <div class="panel-body">
                             @if(task.getCommentsList().size() - 1 == index) {
                                 <div class="panel panel-info">
-                                } else {
-                                <div class="panel panel-default">
-                                }
                                     <div class="panel-heading">
                                         <div class="panel-title">
-                                            @comment.getCommentAuthor().fullname
+                                            <a href="/task/@task.code/user/@task.getAssigned().id" data-target="/task/@task.code/user/@task.getAssigned().id">@task.getAssigned().fullname</a>
                                             added a comment -
                                             @comment.getAddeddate()
                                         </div>
                                     </div>
                                     <div class="panel-body">@comment.getComment()</div>
                                 </div>
+                                <a href="/task/@task.code/addcomment" data-target="/task/@task.code/addcomment" class="btn btn-default btn-sm menuButtons">Add comment</a>
+                                } else {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="panel-title">
+                                            <a href="/task/@task.code/user/@task.getAssigned().id" data-target="/task/@task.code/user/@task.getAssigned().id">@task.getAssigned().fullname</a>
+                                            added a comment -
+                                            @comment.getAddeddate()
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">@comment.getComment()</div>
                                 </div>
+                                }
                         </div>
                     }
-
+                } else {
+                    <div class="panel-body">
+                        <a href="/task/@task.code/addcomment" data-target="/task/@task.code/addcomment" class="btn btn-default btn-sm menuButtons">
+                            Add comment</a>
+                    </div>
                 }
-
             </div>
 
         </div>
@@ -140,25 +149,44 @@
             </div>
             <div class="panel-body">
                 <b>Assigned: </b>
-                <a href="/user/@task.getAssigned().id" data-target="user/@task.getAssigned().id">@task.getAssigned().fullname</a>
+                <a href="/task/@task.code/user/@task.getAssigned().id" data-target="/task/@task.code/user/@task.getAssigned().id">@task.getAssigned().fullname</a>
                 <a href="/task/@task.code/assign" data-target="/task/@task.code/" class="btn btn-sm btn-default assignButton">Assign</a>
 
                 <br>
 
                 <b>Reporter: </b>
-                <a href="/user/@task.getTaskProperties().getReporter().id" data-target="user/@task.getTaskProperties().getReporter().id">
+                <a href="/task/@task.code/user/@task.getTaskProperties().getReporter().id" data-target="/task/@task.code/user/@task.getTaskProperties().getReporter().id">
                 @task.getTaskProperties().getReporter().fullname</a>
 
                 <br>
 
                 <b>Watchers: </b>
                 @for(watcher <- watchers) {
-                    <a href="/user/@watcher.id" data-target="user/@watcher.id">@watcher.fullname</a>
+                    <a href="/task/@task.code/user/@watcher.id" data-target="/task/@task.code/user/@watcher.id">@watcher.fullname</a>
                     <a href="/task/@task.code/deletewatcher/@watcher.id" class="icon-block">
                         <i class="fa fa-times deleteCross"></i>
                     </a>
                 }
                 <a href="/task/@task.code/addwatcher" data-target="/task/@task.code/addwatcher" class="btn btn-sm btn-default addWatcherButton">Add Watcher</a>
+            </div>
+        </div>
+
+        @*TimeTracking*@
+        <div class="panel panel-info taskPanel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><b>Time tracking</b></h3>
+            </div>
+            <div class="panel-body">
+                <b>Estimated: </b>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" style="width: 100%;">@task.getTimeTracking().getEstimatedTime() day(s)</div>
+                </div>
+
+                <b>Remaining: </b>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-warning" style="width: @task.getTimeTracking().getRemainingTimePercent()%;">@task.getTimeTracking().getRemainingTime() day(s)</div>
+                </div>
+                <a href="/task/@task.code/logwork" data-target="/task/@task.code/logwork" class="btn btn-sm btn-default assignButton">Log work</a>
             </div>
         </div>
     </div>
