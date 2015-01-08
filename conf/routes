@@ -36,6 +36,7 @@ GET         /logout                              controllers.Application.logout(
 
 # UserPage
 GET         /task/:code/user/:id                 controllers.Dashboard.userPage(code: String, id: Long)
+POST        /task/:code/user/               controllers.Dashboard.saveUserIcon(code: String)
 
 # Settings
 GET         /settings                            controllers.account.settings.Index.index()

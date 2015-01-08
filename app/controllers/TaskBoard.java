@@ -54,8 +54,9 @@ public class TaskBoard extends Controller {
         }
 
         TaskBoard.AssignTask assignTaskFormFilled = assignTaskForm.get();
-        if (assignTaskFormFilled.comment != null) {
-            addNewComment(task, assignTaskFormFilled.comment);
+        String comment = assignTaskFormFilled.comment;
+        if (comment != null && comment != "") {
+            addNewComment(task, comment);
         }
 
         task.assigne = Utils.getEmployee(assignTaskFormFilled.assignName).id;

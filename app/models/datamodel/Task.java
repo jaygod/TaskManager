@@ -135,4 +135,8 @@ public class Task extends Model {
                 .where()
                 .eq("task_id", this.id).findUnique();
     }
+
+    public void setCommentsList(List<Comment> commentsList) {
+        this.commentsList = commentsList;
+    }
 }

@@ -6,7 +6,6 @@ import models.datamodel.*;
 import play.Logger;
 import play.i18n.Messages;
 import play.mvc.Controller;
-import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import java.util.List;
  */
 public class Utils extends Controller {
 
+    private static final int MAX_ROWS = 5;
     private static List<String> allTasks;
 
     public static List<String> getAllProjectsNames() {
@@ -80,7 +80,7 @@ public class Utils extends Controller {
         List<Task> taskList = Ebean.find(Task.class)
                 .where()
                 .eq("assigne", Employee.findByEmail(request().username()).id).findList();
-        for(Task task : taskList) {
+        for (Task task : taskList) {
             TaskProperties taskProperties = Ebean.find(TaskProperties.class)
                     .where()
                     .eq("task_id", task.getId()).findUnique();
@@ -116,7 +116,7 @@ public class Utils extends Controller {
                 .eq("task_id", taskId).findList();
 
         List<Employee> employeesList = new ArrayList<>();
-        for(Watcher watcher : watchersList) {
+        for (Watcher watcher : watchersList) {
             employeesList.add(getEmployee(watcher.getUserId()));
         }
         return employeesList;
@@ -146,12 +146,28 @@ public class Utils extends Controller {
         Ebean.delete(Watcher.class, watcher.getId());
     }
 
+    public static List<Task> getRecentCommentedTasks() {
+        List<Comment> commentsList = Ebean.find(Comment.class).
+                setMaxRows(MAX_ROWS).orderBy("addeddate desc").findList();
+
+        List<Task> taskList = new ArrayList<>();
+        for (Comment comment : commentsList) {
+            Task task = Ebean.find(Task.class).where().eq("id", comment.getTaskId()).findUnique();
+            List<Comment> taskCommentsList = new ArrayList<Comment>();
+            taskCommentsList.add(comment);
+            task.setCommentsList(taskCommentsList);
+            taskList.add(task);
+        }
+
+        return taskList;
+    }
+
     public static byte[] imageToByte(File file) throws FileNotFoundException {
         FileInputStream fis = new FileInputStream(file);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         byte[] buf = new byte[1024];
         try {
-            for (int readNum; (readNum = fis.read(buf)) != -1;) {
+            for (int readNum; (readNum = fis.read(buf)) != -1; ) {
                 bos.write(buf, 0, readNum);
             }
         } catch (IOException ex) {

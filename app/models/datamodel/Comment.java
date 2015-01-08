@@ -87,4 +87,8 @@ public class Comment extends Model {
     public void setAddeddate(Timestamp addeddate) {
         this.addeddate = addeddate;
     }
+
+    public int getTaskId() {
+        return taskId;
+    }
 }

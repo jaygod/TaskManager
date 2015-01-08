@@ -49,6 +49,9 @@ public class Employee extends Model {
     @Formats.NonEmpty
     public Boolean validated = false;
 
+
+    private byte[] icon;
+
     // -- Queries (long id, user.class)
     public static Model.Finder<Integer, Employee> find = new Model.Finder<Integer, Employee>(Integer.class, Employee.class);
 
@@ -131,4 +134,20 @@ public class Employee extends Model {
         return find.all();
     }
 
+    public byte[] getIcon() {
+        return icon;
+    }
+
+    public void setIcon(byte[] icon) {
+        this.icon = icon;
+    }
+
+    public String getImageData() {
+        if (icon != null) {
+            sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+            String encode = encoder.encode(icon);
+            return encode;
+        }
+        return "";
+    }
 }

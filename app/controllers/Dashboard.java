@@ -1,9 +1,10 @@
 package controllers;
 
-import com.google.common.io.Files;
 import models.Employee;
 import models.datamodel.*;
 import play.Logger;
+import play.api.Play;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.i18n.Messages;
@@ -24,8 +25,10 @@ import static play.data.Form.form;
 @Security.Authenticated(Secured.class)
 public class Dashboard extends Controller {
 
+    private static String USER_ICONS_PATH = "public\\images\\User_icons\\";
+
     public static Result index() {
-        return ok(index.render(Employee.findByEmail(request().username()), Utils.getAllProjectsNames(), Utils.getAllAssignedTasks()));
+        return ok(index.render(Employee.findByEmail(request().username()), Utils.getAllProjectsNames(), Utils.getAllAssignedTasks(), Utils.getRecentCommentedTasks()));
     }
 
     public static Result userPage(String code, long id) {
@@ -50,22 +53,23 @@ public class Dashboard extends Controller {
             Form<Dashboard.CreateProject> createProjectForm = form(Dashboard.CreateProject.class).bindFromRequest();
 
             if (createProjectForm.hasErrors()) {
-                System.out.println("błąd");
-//                return badRequest(singUp.render(createProjectForm));
+                return badRequest(createProject.render(Employee.findByEmail(request().username()), form(CreateProject.class)));
             }
 
             Dashboard.CreateProject createProjectFormFilled = createProjectForm.get();
-//        Result resultError = checkBeforeSave(createTaskForm, createTask.email);
-//
-//        if (resultError != null) {
-//            return resultError;
-//        }
 
             Project project = new Project();
             project.setName(createProjectFormFilled.projectName);
             project.setSummary(createProjectFormFilled.description);
             project.setVersion(createProjectFormFilled.version);
             project.setDeadline(createProjectFormFilled.deadline);
+
+            if (createProjectFormFilled.projectIconPath != null) {
+                String projectIconPath = createProjectFormFilled.projectIconPath.replace("assets", "public");
+                File icon = Play.current().getFile(projectIconPath);
+
+                project.setIcon(Utils.imageToByte(icon));
+            }
 
             project.save();
 
@@ -76,6 +80,24 @@ public class Dashboard extends Controller {
         }
 
         return badRequest();
+    }
+
+    public static Result saveUserIcon(String taskCode) {
+
+        DynamicForm bindedForm = form().bindFromRequest();
+
+        String projectIconPath = USER_ICONS_PATH + bindedForm.get("avatar");
+        File icon = Play.current().getFile(projectIconPath);
+        Employee user = Employee.findByEmail(request().username());
+
+        try {
+            user.setIcon(Utils.imageToByte(icon));
+            user.save();
+        } catch (Exception e) {
+            Logger.error("User icon save error", e);
+            flash("error", Messages.get("error.technical"));
+        }
+        return ok(userPage.render(Employee.findByEmail(request().username()), user, taskCode));
     }
 
     public static Result saveTask() {
@@ -104,7 +126,7 @@ public class Dashboard extends Controller {
 
             task.setTaskProperties(getProperties(createTaskFormFilled, task));
             task.setAttachment(getAttachment(task));
-            task.setTimeTracking(getTimeTracking(createTaskFormFilled,task));
+            task.setTimeTracking(getTimeTracking(createTaskFormFilled, task));
 
             return ok(taskCreated.render(Employee.findByEmail(request().username()), task.code));
         } catch (Exception e) {
@@ -168,6 +190,8 @@ public class Dashboard extends Controller {
 
         @Constraints.Required
         public String version;
+
+        public String projectIconPath;
 
         /**
          * Validate the authentication.

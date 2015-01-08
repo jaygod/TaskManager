@@ -1,10 +1,10 @@
 @(user: Employee)(createProjectForm: Form[Dashboard.CreateProject])
 
+
 @import helper._
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
-    @form(controllers.routes.Dashboard.saveProject()) {
-
+    @form(action = controllers.routes.Dashboard.saveProject(), 'enctype -> "multipart/form-data") {
         @main(user) {
 
             <div class="singIn">
@@ -45,6 +45,22 @@
                         'type -> "datetime-local",
                         'class -> "form-control"
                     )
+                    Select project icon
+                    <div id="image_container">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/1.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/2.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/3.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/4.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/5.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/6.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/7.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/8.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/9.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/10.png")">
+                    </div>
+                    <form name="projectIcon">
+                        <input id="projectIconPath" name="projectIconPath" type="hidden" value="" />
+                    </form>
                 </fieldset>
                 <div class="container buttonSingup">
                     <div class="form-actions">

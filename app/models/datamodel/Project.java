@@ -32,6 +32,8 @@ public class Project extends Model {
     @Constraints.Required
     private Date deadline;
 
+    private byte[] icon;
+
     public static Finder<Integer, Project> find = new Finder<Integer, Project>(Integer.class, Project.class);
 
     public static List<Project> all() {
@@ -82,5 +84,13 @@ public class Project extends Model {
      */
     public static Project findByProjectName(String projectName) {
         return find.where().eq("name", projectName).findUnique();
+    }
+
+    public void setIcon(byte[] icon) {
+        this.icon = icon;
+    }
+
+    public byte[] getIcon() {
+        return icon;
     }
 }

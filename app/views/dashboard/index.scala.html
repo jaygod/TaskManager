@@ -1,93 +1,92 @@
-@(user: Employee)(projectsList: List[String])(assignedTasksList: List[datamodel.Task])
+@(user: Employee)(projectsList: List[String])(assignedTasksList: List[datamodel.Task])(taskList: List[datamodel.Task])
 
-@main(user) {
+    @main(user) {
+        <div class="container">
+            @*Task List*@
+            <div class="panel panel-info taskListPanel">
+                <div class="panel-heading"><b>Active tasks</b></div>
+                <div class="panel-body">
+                @if(assignedTasksList.isEmpty) {
+                    <tr><b>No tasks assigned yet</b></tr>
+                } else {
+                    <table class="table table-condensed">
+                        <tr>
+                            <th>T</th>
+                            <th>Code</th>
+                            <th>Summary</th>
+                            <th>P</th>
+                            <th>Status</th>
+                        </tr>
+                        @for(task <- assignedTasksList) {
+                            <tr>
 
-    <div class="container">
-        <div class="btn-group-vertical col-lg-2" role="group" aria-label="...">
-        @if(user.isAdmin) {
-            <a href="createproject" type="button" class="btn btn-info navbar-btn" data-target="#createProject">Create Project</a>
-            <a href="createtask" type="button" class="btn btn-info navbar-btn" data-target="#createTask">Create Task</a>
-        }
-        </div>
+                                @if(task.getTaskProperties().getTaskType.getType().equals("Bug")) {
+                                    <td><i class="fa fa-bug blocker"></i></td>
+                                }
+                                @if(task.getTaskProperties().getTaskType.getType().equals("Task")) {
+                                    <td><i class="fa fa-tasks minor"></i></td>
+                                }
+                                @if(task.getTaskProperties().getTaskType.getType().equals("Story")) {
+                                    <td><i class="fa fa-newspaper-o story"></i></td>
+                                }
+                                @if(task.getTaskProperties().getTaskType.getType().equals("Technical task")) {
+                                    <td><i class="fa fa-scissors technical_task"></i></td>
+                                }
+                                @if(task.getTaskProperties().getTaskType.getType().equals("New feature")) {
+                                    <td><i class="fa fa-lightbulb-o major"></i></td>
+                                }
+                                @if(task.getTaskProperties().getTaskType.getType().equals("Improvment")) {
+                                    <td><i class="fa fa-plus-square trivial"></i></td>
+                                }
 
-        @*<div class="panel panel-default col-lg-2 taskPanel">*@
-        @*<!-- Default panel contents -->*@
-        @*<div class="panel-heading"><b>Project list</b></div>*@
+                            <td><div style="width : 100 px" ><a href="task/@task.code" data-target="#task/@task.code">@task.code</a></div></td>
+                            <td><a href="task/@task.code" data-target="#task/@task.code">@task.summary</a></td>
 
-        @*for(project <- projectsList) {*@
-        @*<option data-icon="glyphicon-heart">@project</option>*@
-        @*}*@
-
-        @*</div>*@
-        @*Task List*@
-        <div class="panel panel-info col-lg-4 dashboardPanel">
-            <div class="panel-heading"><b>Active tasks</b></div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-1"><b>T</b></div>
-                    <div class="col-md-2"><b>Code</b></div>
-                    <div class="col-md-5"><b>Summary</b></div>
-                    <div class="col-md-2"><b>P</b></div>
-                    <div class="col-md-2"><b>Status</b></div>
-                </div>
-                <div class="row">
-
-                    @if(assignedTasksList.isEmpty) {
-                        <div class="col-md-5">No tasks assigned yet</div>
-                    }
-                    @for(task <- assignedTasksList) {
-
-                        @if(task.getTaskProperties().getTaskType.getType().equals("Bug")) {
-                            <div title="@task.getTaskProperties().getTaskType.getType()" class="col-md-1"><i class="fa fa-bug blocker"></i></div>
+                                @if(task.getTaskProperties().priority.equals("Trivial")) {
+                                    <td><i class="fa fa-circle trivial"></i></td>
+                                }
+                                @if(task.getTaskProperties().priority.equals("Minor")) {
+                                    <td><i class="fa fa-circle minor"></i></td>
+                                }
+                                @if(task.getTaskProperties().priority.equals("Major")) {
+                                    <td><i class="fa fa-circle major"></i></td>
+                                }
+                                @if(task.getTaskProperties().priority.equals("Critical")) {
+                                    <td><i class="fa fa-exclamation-circle critical"></i></td>
+                                }
+                                @if(task.getTaskProperties().priority.equals("Blocker")) {
+                                    <td><i class="fa fa-minus-circle blocker"></i></td>
+                                }
+                            <td>@task.status</td>
+                            </tr>
                         }
-                        @if(task.getTaskProperties().getTaskType.getType().equals("Task")) {
-                            <div title="@task.getTaskProperties().getTaskType.getType()" class="col-md-1"><i class="fa fa-tasks minor"></i></div>
-                        }
-                        @if(task.getTaskProperties().getTaskType.getType().equals("Story")) {
-                            <div title="@task.getTaskProperties().getTaskType.getType()" class="col-md-1"><i class="fa fa-newspaper-o story"></i></div>
-                        }
-                        @if(task.getTaskProperties().getTaskType.getType().equals("Technical task")) {
-                            <div title="@task.getTaskProperties().getTaskType.getType()" class="col-md-1"><i class="fa fa-scissors technical_task"></i></div>
-                        }
-                        @if(task.getTaskProperties().getTaskType.getType().equals("New feature")) {
-                            <div title="@task.getTaskProperties().getTaskType.getType()" class="col-md-1"><i class="fa fa-lightbulb-o major"></i></div>
-                        }
-                        @if(task.getTaskProperties().getTaskType.getType().equals("Improvment")) {
-                            <div title="@task.getTaskProperties().getTaskType.getType()" class="col-md-1"><i class="fa fa-plus-square trivial"></i></div>
-                        }
-
-                        <div class="col-md-2"><a href="task/@task.code" data-target="#task/@task.code">@task.code</a></div>
-                        <div class="col-md-5"><a href="task/@task.code" data-target="#task/@task.code">@task.summary</a></div>
-
-                        @if(task.getTaskProperties().priority.equals("Trivial")) {
-                            <div title="@task.getTaskProperties().priority" class="col-md-2"><i class="fa fa-circle trivial"></i></div>
-                        }
-                        @if(task.getTaskProperties().priority.equals("Minor")) {
-                            <div title="@task.getTaskProperties().priority" class="col-md-2"><i class="fa fa-circle minor"></i></div>
-                        }
-                        @if(task.getTaskProperties().priority.equals("Major")) {
-                            <div title="@task.getTaskProperties().priority" class="col-md-2"><i class="fa fa-circle major"></i></div>
-                        }
-                        @if(task.getTaskProperties().priority.equals("Critical")) {
-                            <div title="@task.getTaskProperties().priority" class="col-md-2"><i class="fa fa-exclamation-circle critical"></i></div>
-                        }
-                        @if(task.getTaskProperties().priority.equals("Blocker")) {
-                            <div title="@task.getTaskProperties().priority" class="col-md-2"><i class="fa fa-minus-circle blocker"></i></div>
-                        }
-                        <div class="col-md-2">@task.status</div>
-                    }
+                    </table>
+                }
                 </div>
             </div>
-        </div>
+            @*Comments*@
+            <div class="panel panel-info commentsPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>Comments</b></h3>
+                </div>
 
-        @*Comments*@
-        <div class="panel panel-info col-lg-8 dashboardPanel">
-            <div class="panel-heading">
-                <h3 class="panel-title">Comments</h3>
-            </div>
-            <div class="panel-body">
-                No comments yet
+                <div class="panel-body">
+                @for(task <- taskList) {
+                    @for((comment, index) <- task.getCommentsList().zipWithIndex) {
+                        <table class="table table-condensed">
+                            <tr>
+                                <th><img class="menuButtonsLeft" src="data:image/png;base64,@comment.getCommentAuthor().getImageData()" style="width:4%;margin-right: 5px;"/>
+                                    <a href="/task/@task.code/user/@comment.getUserId()" data-target="/task/@task.code/user/@comment.getUserId()">@comment.getCommentAuthor().fullname</a>
+                                    added a comment in <a href="/task/@task.code" data-target="/task/@task.code">@task.code</a>
+                                    - @comment.getAddeddate()</th>
+                            </tr>
+                            <tr>
+                                <td>@comment.getComment()</td>
+                            </tr>
+                        </table>
+                    }
+                }
+                </div>
             </div>
         </div>
-    </div>
-}
+    }

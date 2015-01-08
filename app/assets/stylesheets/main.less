@@ -83,11 +83,11 @@ section {
 }
 
 .taskPanel {
-   box-shadow: 0 0 10px black;
-   .border-radius(5px);
- }
+  //   box-shadow: 0 0 10px black;
+  .border-radius(5px);
+}
 
-.dashboardPanel {
+.tboardPanel {
   box-shadow: 0 0 10px black;
   width: 50%;
   .border-radius(5px);
@@ -106,7 +106,7 @@ section {
   .border-radius(5px);
 }
 
-.imageBig,  {
+.imageBig, {
   box-shadow: 0 0 10px black;
   display: block;
   margin-left: auto;
@@ -114,8 +114,12 @@ section {
   .border-radius(5px);
 }
 
+.imageLogo {
+  padding: 5px;
+}
+
 .backImageButton {
-  text-align:center;
+  text-align: center;
 }
 
 .singUp, .singIn {
@@ -142,7 +146,16 @@ section {
   float: right;
 }
 
-.assignButton, .addWatcherButton{
+.createTaskButtons {
+  float: right;
+  padding-right: 30px;
+}
+
+.menuButtonsLeft {
+  float: left;
+}
+
+.assignButton, .addWatcherButton {
   float: right;
 }
 
@@ -153,13 +166,17 @@ section {
 .buttonCreateIssue {
   content: ".";
   padding: 30px 30px 5px 80%;
- }
+}
+
+.changeAvatarButton {
+  margin-top: 10px;
+}
 
 .userButton {
   color: white;
-  background:none;
-  border:none;
-  box-shadow:none;
+  background: none;
+  border: none;
+  box-shadow: none;
 }
 
 .descriptionForm {
@@ -200,4 +217,67 @@ section {
 
 textarea {
   resize: none;
+}
+
+table {
+  width: 100%;
+}
+
+table, th, td {
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 5px;
+  text-align: left;
+}
+
+table tr:nth-child(even) {
+  background-color: #FAFCFF;
+}
+
+table tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+tr:last-child {
+  background: yellow;
+}
+
+.taskListPanel {
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  .border-radius(5px);
+}
+
+.commentsPanel {
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  clear: both;
+  width: 60%;
+  .border-radius(5px);
+}
+
+.userPanel {
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  .border-radius(5px);
+}
+
+.panel {
+  background-color: #FAFCFF;
+  //  border: 0;
+}
+
+.img_border {
+  border: 2px solid black;
+}
+
+.projectIcons {
+  width: 24%;
 }
