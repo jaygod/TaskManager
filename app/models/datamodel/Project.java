@@ -93,4 +93,13 @@ public class Project extends Model {
     public byte[] getIcon() {
         return icon;
     }
+
+    public String getImageData() {
+        if (icon != null) {
+            sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+            String encode = encoder.encode(icon);
+            return encode;
+        }
+        return "";
+    }
 }

@@ -3,7 +3,7 @@
 @main(user) {
     @wflash()
 
-    <h4> <a href="/task/@task.projectId" data-target="/task/@task.projectId/">@task.getProjectName()</a>
+    <h4> <a href="/project/@task.projectId" data-target="/project/@task.projectId/">@task.getProjectName()</a>
         /  <a href="/task/@task.code" data-target="/task/@task.code/">@task.code</a></h4>
     <h2>@task.summary</h2>
 
@@ -61,9 +61,10 @@
                         <b>Labels: </b>@task.labels <br>
                     </div>
                     <div class="col-md-4">
-                        <b>Status: </b>@task.status <br>
+                        <b>Status: </b>@task.getTaskStatus().getStatus() <br>
                         <b>Resolution: </b>Unresolved <br>
                     </div>
+                    <a href="/task/@task.code/status" data-target="/task/@task.code/status" class="btn btn-sm btn-default statusButton">Change status</a>
                 </div>
             </div>
 
@@ -82,14 +83,17 @@
                 <div class="panel-heading">
                     <h3 class="panel-title"><b>Attachments</b></h3>
                 </div>
-                @if(task.getAttachment() != (null)) {
+                @if(task.getAttachmentList().size() != 0) {
                     <div class="panel-body">
-                        <a href="/task/@task.code/image/@task.getAttachment.getId()" id="image" onclick="/task/@task.code/image/@task.getAttachment.getId()">
-                        <img class="image" src="data:image/jpeg;base64,@task.getAttachment().getImageData()" alt="@task.getAttachment.name"
-                        style="width:30%;height:30%"/>
-                        </a>
-                        <br>
-                        <a href="/task/@task.code/image/@task.getAttachment.getId()" data-target="/task/@task.code/image/@task.getAttachment.getId()">@task.getAttachment.name</a>
+                        <div class="attachments">
+                            @for(attachment <- task.getAttachmentList()) {
+                                <a href="/task/@task.code/image/@attachment.getId()" id="image" onclick="/task/ @task.code/image/@attachment.getId()">
+                                <img class="image" src="data:image/jpeg;base64,@attachment.getImageData()" alt="@attachment.name"
+                                style="width:30%;height:30%"/>
+                                </a>
+                                @*<a href="/task/@task.code/image/@attachment.getId()" data-target="/task/@task.code/image/@attachment.getId()">@attachment.name</a>*@
+                            }
+                        </div>
                     </div>
                 } else {
                     <div class="panel-body">

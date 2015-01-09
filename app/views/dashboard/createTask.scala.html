@@ -80,11 +80,7 @@
                     'class -> "form-control descriptionForm"
                 )
                 Attatchments
-                @inputFile(
-                    field = createTaskForm("file"),
-                    args = 'size -> 10,
-                    '_label -> null
-                )
+                <input type="file" multiple name="files" id="files"/>
 
                 Project deadline
                 @inputDate(

@@ -1,43 +1,19 @@
-@(user: Employee)(projectsList: List[datamodel.Project])(assignedTasksList: List[datamodel.Task])(taskList: List[datamodel.Task])
+@(user: Employee)(project: models.datamodel.Project)(taskList: List[models.datamodel.Task])(recentCommentedTasks: List[models.datamodel.Task])
 
-    @main(user) {
+@main(user) {
+    @wflash()
 
-    <h2>Dashboard</h2>
+    <h3> <a href="/project/@project.getId()" data-target="/project/@project.getId()/">@project.getName()</a></h3>
+    <h4>@project.getSummary()</h4>
 
-    <h4 style="color:#285e8e">Welcome @user.fullname!</h4>
+        <hr class="divider">
 
-    <hr class="divider">
-
-    <div class="row">
-        <div class="col-md-5">
-
-            @*Projects*@
-            <div class="panel panel-info taskPanel">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><b>Projects</b></h3>
-                </div>
-
-                <div class="panel-body">
-                @for(project <- projectsList) {
-                    <table class="table table-condensed">
-                        <tr>
-                            <th><img class="menuButtonsLeft" src="data:image/png;base64,@project.getImageData()" style="width:4%;margin-right: 5px;"/>
-                                <a href="/project/@project.getId()" data-target="/project/@project.getId()">@project.getName()</a>
-                            </tr>
-                            <tr>
-                                <td>@project.getSummary()</td>
-                         </tr>
-                    </table>
-                }
-                </div>
-            </div>
-        </div>
-        <div class="col-md-7">
+        <div class="container">
             @*Task List*@
             <div class="panel panel-info taskListPanel">
                 <div class="panel-heading"><b>Active tasks</b></div>
                 <div class="panel-body">
-                @if(assignedTasksList.isEmpty) {
+                @if(taskList.isEmpty) {
                     <tr><b>No tasks assigned yet</b></tr>
                 } else {
                     <table class="table table-condensed">
@@ -47,10 +23,10 @@
                             <th>Summary</th>
                             <th>P</th>
                             <th>Status</th>
+                            <th>Assigned</th>
                         </tr>
-                        @for(task <- assignedTasksList) {
+                        @for(task <- taskList) {
                             <tr>
-
                                 @if(task.getTaskProperties().getTaskType.getType().equals("Bug")) {
                                     <td><i class="fa fa-bug blocker"></i></td>
                                 }
@@ -70,7 +46,7 @@
                                     <td><i class="fa fa-plus-square trivial"></i></td>
                                 }
 
-                            <td><div style="width : 100 px" ><a href="task/@task.code" data-target="#task/@task.code">@task.code</a></div></td>
+                            <td><div style="width:100px" ><a href="/task/@task.code" data-target="#/task/@task.code">@task.code</a></div></td>
                             <td><a href="task/@task.code" data-target="#task/@task.code">@task.summary</a></td>
 
                                 @if(task.getTaskProperties().priority.equals("Trivial")) {
@@ -89,13 +65,13 @@
                                     <td><i class="fa fa-minus-circle blocker"></i></td>
                                 }
                             <td>@task.getTaskStatus().getStatus()</td>
+                            <td><a href="/task/@task.code/user/@task.getAssigned().id" data-target="/task/@task.code/user/@task.getAssigned().id">@task.getAssigned().fullname</a></td>
                             </tr>
                         }
                     </table>
                 }
                 </div>
             </div>
-
             @*Comments*@
             <div class="panel panel-info commentsPanel">
                 <div class="panel-heading">
@@ -103,11 +79,11 @@
                 </div>
 
                 <div class="panel-body">
-                @for(task <- taskList) {
+                @for(task <- recentCommentedTasks) {
                     @for((comment, index) <- task.getCommentsList().zipWithIndex) {
                         <table class="table table-condensed">
                             <tr>
-                                <th><img class="menuButtonsLeft" src="data:image/png;base64,@comment.getCommentAuthor().getImageData()" style="width:4%;margin-right: 5px;"/>
+                                <th><img class="menuButtonsLeft" src="data:image/png;base64,@comment.getCommentAuthor().getImageData()" style="width:4%;margin-right:5px;"/>
                                     <a href="/task/@task.code/user/@comment.getUserId()" data-target="/task/@task.code/user/@comment.getUserId()">@comment.getCommentAuthor().fullname</a>
                                     added a comment in <a href="/task/@task.code" data-target="/task/@task.code">@task.code</a>
                                     - @comment.getAddeddate()</th>
@@ -120,6 +96,5 @@
                 }
                 </div>
             </div>
-            </div>
         </div>
-    }
+}

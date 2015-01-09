@@ -18,10 +18,11 @@ import java.util.List;
 public class Task extends Model {
 
     private TaskProperties taskProperties;
-    private Attachment attachment;
+    private List<Attachment> attachmentList;
     private Employee assigned;
     private List<Comment> commentsList;
     private TimeTracking timeTracking;
+    private Status taskStatus;
 
     @Id
     @Column(name = "id")
@@ -45,7 +46,7 @@ public class Task extends Model {
     public String labels;
 
     @Constraints.Required
-    public String status;
+    public int status;
 
     @Constraints.Required
     public Date created;
@@ -73,8 +74,8 @@ public class Task extends Model {
         this.taskProperties = taskProperties;
     }
 
-    public void setAttachment(Attachment attachment) {
-        this.attachment = attachment;
+    public void setAttachmentList(List<Attachment> attachmentList) {
+        this.attachmentList = attachmentList;
     }
 
     public void setTimeTracking(TimeTracking timeTracking) {
@@ -85,8 +86,8 @@ public class Task extends Model {
         return taskProperties;
     }
 
-    public Attachment getAttachment() {
-        return attachment;
+    public List<Attachment> getAttachmentList() {
+        return attachmentList;
     }
 
     public Employee getAssigned() {
@@ -138,5 +139,19 @@ public class Task extends Model {
 
     public void setCommentsList(List<Comment> commentsList) {
         this.commentsList = commentsList;
+    }
+
+    public Status getTaskStatus() {
+        return getStatusFromDatabase();
+    }
+
+    public void setTaskStatus(Status taskStatus) {
+        this.taskStatus = taskStatus;
+    }
+
+    public Status getStatusFromDatabase() {
+        return Ebean.find(Status.class)
+                .where()
+                .eq("id", this.status).findUnique();
     }
 }

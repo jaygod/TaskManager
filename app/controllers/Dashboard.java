@@ -17,7 +17,9 @@ import views.html.dashboard.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static play.data.Form.form;
 
@@ -25,10 +27,12 @@ import static play.data.Form.form;
 @Security.Authenticated(Secured.class)
 public class Dashboard extends Controller {
 
+    private static final String OPEN_STATUS = "Open";
+    private static final int MAX_ROWS = 5;
     private static String USER_ICONS_PATH = "public\\images\\User_icons\\";
 
     public static Result index() {
-        return ok(index.render(Employee.findByEmail(request().username()), Utils.getAllProjectsNames(), Utils.getAllAssignedTasks(), Utils.getRecentCommentedTasks()));
+        return ok(index.render(Employee.findByEmail(request().username()), Project.all(), Utils.getAllAssignedTasks(), Utils.getRecentCommentedTasks(MAX_ROWS)));
     }
 
     public static Result userPage(String code, long id) {
@@ -119,13 +123,13 @@ public class Dashboard extends Controller {
             task.created = new Date(System.currentTimeMillis());
             task.assigne = Employee.findByFullname(createTaskFormFilled.assigneFullName).id;
             task.projectId = Project.findByProjectName(createTaskFormFilled.projectName).getId();
-            task.status = "Created";
+            task.status =  Utils.getStatus(OPEN_STATUS).getId();
             task.save();
             task.code = createTaskFormFilled.projectName + "-" + task.getId();
             task.save();
 
             task.setTaskProperties(getProperties(createTaskFormFilled, task));
-            task.setAttachment(getAttachment(task));
+            task.setAttachmentList(getAttachmentList(task));
             task.setTimeTracking(getTimeTracking(createTaskFormFilled, task));
 
             return ok(taskCreated.render(Employee.findByEmail(request().username()), task.code));
@@ -148,19 +152,21 @@ public class Dashboard extends Controller {
         return taskProperties;
     }
 
-    private static Attachment getAttachment(Task task) throws IOException {
+    private static List<Attachment> getAttachmentList(Task task) throws IOException {
 
         Http.MultipartFormData body = request().body().asMultipartFormData();
-        Http.MultipartFormData.FilePart file = body.getFile("file");
-        if (file != null) {
-
-            Attachment attachment = new Attachment();
-            attachment.name = file.getFilename();
-            attachment.content_type = file.getContentType();
-            attachment.setData(Utils.imageToByte(file.getFile()));
-            attachment.taskId = task.getId();
-            attachment.save();
-            return attachment;
+        List<Http.MultipartFormData.FilePart> files = body.getFiles();
+        if (files != null) {
+            List<Attachment> attachmentList = new ArrayList<>();
+            for (Http.MultipartFormData.FilePart file : files) {
+                Attachment attachment = new Attachment();
+                attachment.name = file.getFilename();
+                attachment.content_type = file.getContentType();
+                attachment.setData(Utils.imageToByte(file.getFile()));
+                attachment.taskId = task.getId();
+                attachment.save();
+                attachmentList.add(attachment);
+            }
         }
         return null;
     }
@@ -233,7 +239,7 @@ public class Dashboard extends Controller {
         public String summary;
         public String priority;
         public String labels;
-        public File file;
+        public File files;
         public String description;
         public Date deadline;
         public String assigneFullName;

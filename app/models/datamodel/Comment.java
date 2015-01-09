@@ -32,6 +32,9 @@ public class Comment extends Model {
     private int userId;
 
     @Constraints.Required
+    private int projectId;
+
+    @Constraints.Required
     private String comment;
 
     @Constraints.Required
@@ -90,5 +93,13 @@ public class Comment extends Model {
 
     public int getTaskId() {
         return taskId;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 }

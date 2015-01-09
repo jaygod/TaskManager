@@ -16,8 +16,20 @@ import java.util.List;
  */
 public class Utils extends Controller {
 
-    private static final int MAX_ROWS = 5;
     private static List<String> allTasks;
+
+    public static Project getProjectById(Long projectId) {
+
+        return Ebean.find(Project.class)
+                .where()
+                .eq("id", projectId).findUnique();
+    }
+
+    public static List<Task> getTasksWithinProject(Long projectId) {
+        return Ebean.find(Task.class)
+                .where()
+                .eq("project_id", projectId).orderBy("code asc").findList();
+    }
 
     public static List<String> getAllProjectsNames() {
 
@@ -79,7 +91,7 @@ public class Utils extends Controller {
     public static List<Task> getAllAssignedTasks() {
         List<Task> taskList = Ebean.find(Task.class)
                 .where()
-                .eq("assigne", Employee.findByEmail(request().username()).id).findList();
+                .eq("assigne", Employee.findByEmail(request().username()).id).orderBy("code asc").findList();
         for (Task task : taskList) {
             TaskProperties taskProperties = Ebean.find(TaskProperties.class)
                     .where()
@@ -131,11 +143,9 @@ public class Utils extends Controller {
     }
 
     public static Attachment getAttachment(long id) {
-        Attachment attachment = Ebean.find(Attachment.class)
+        return Ebean.find(Attachment.class)
                 .where()
                 .eq("id", id).findUnique();
-
-        return attachment;
 
     }
 
@@ -146,9 +156,9 @@ public class Utils extends Controller {
         Ebean.delete(Watcher.class, watcher.getId());
     }
 
-    public static List<Task> getRecentCommentedTasks() {
+    public static List<Task> getRecentCommentedTasks(int maxRows) {
         List<Comment> commentsList = Ebean.find(Comment.class).
-                setMaxRows(MAX_ROWS).orderBy("addeddate desc").findList();
+                setMaxRows(maxRows).orderBy("addeddate desc").findList();
 
         List<Task> taskList = new ArrayList<>();
         for (Comment comment : commentsList) {
@@ -160,6 +170,37 @@ public class Utils extends Controller {
         }
 
         return taskList;
+    }
+
+    public static List<Task> getRecentCommentedTasksWithinProject(Long projectId, int maxRows) {
+        List<Comment> commentsList = Ebean.find(Comment.class).where().eq("project_id", projectId).
+                setMaxRows(maxRows).orderBy("addeddate desc").findList();
+
+        List<Task> taskList = new ArrayList<>();
+        for (Comment comment : commentsList) {
+            Task task = Ebean.find(Task.class).where().eq("id", comment.getTaskId()).where().findUnique();
+            List<Comment> taskCommentsList = new ArrayList<Comment>();
+            taskCommentsList.add(comment);
+            task.setCommentsList(taskCommentsList);
+            taskList.add(task);
+        }
+
+        return taskList;
+    }
+
+    public static models.datamodel.Status getStatus(String status) {
+        return Ebean.find(models.datamodel.Status.class)
+                .where()
+                .eq("status", status).findUnique();
+    }
+
+    public static List<String> getAllStatusNamesList() {
+        List<String> statusNamesList = new ArrayList<>();
+        List<models.datamodel.Status> statusList = models.datamodel.Status.find.all();
+        for (models.datamodel.Status status : statusList) {
+            statusNamesList.add(status.getStatus());
+        }
+        return statusNamesList;
     }
 
     public static byte[] imageToByte(File file) throws FileNotFoundException {

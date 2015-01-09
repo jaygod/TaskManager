@@ -2,6 +2,7 @@ package controllers;
 
 import models.Employee;
 import models.datamodel.*;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Controller;
@@ -24,8 +25,8 @@ public class TaskBoard extends Controller {
     public static Result index(String code) {
         Task task = Task.getTask(code);
 
-        Attachment attachment = Attachment.getAttachment(task.getId());
-        task.setAttachment(attachment);
+        List<Attachment> attachmentList = Attachment.getAttachment(task.getId());
+        task.setAttachmentList(attachmentList);
 
         TaskProperties taskProperties = TaskProperties.getTaskProperties(task.getId());
         task.setTaskProperties(taskProperties);
@@ -141,6 +142,7 @@ public class TaskBoard extends Controller {
         Comment comment = new Comment();
         comment.setUserId(Employee.findByEmail(request().username()).id);
         comment.setTaskId(task.getId());
+        comment.setProjectId(task.projectId);
 
         comment.setComment(commentBody);
         comment.setAddeddate(new Timestamp(System.currentTimeMillis()));
@@ -174,6 +176,23 @@ public class TaskBoard extends Controller {
         flash("success", Messages.get("work.log.adjusted"));
         return index(taskCode);
     }
+
+    public static Result status(String taskCode) {
+        return ok(status.render(Employee.findByEmail(request().username()), taskCode, Utils.getAllStatusNamesList()));
+    }
+
+    public static Result saveStatus(String taskCode) {
+        DynamicForm bindedForm = form().bindFromRequest();
+
+        String status = bindedForm.get("status");
+
+        Task task = Task.getTask(taskCode);
+        task.status = Utils.getStatus(status).getId();
+        task.save();
+
+        return index(taskCode);
+    }
+
 
     /**
      * AssignTask class used by AssignTask Form.
@@ -247,7 +266,7 @@ public class TaskBoard extends Controller {
         }
 
         private boolean isBlank(String input) {
-            return input == null || input.isEmpty() || input.trim().isEmpty();
+            return input == null || input.isEmpty() || input.trim().isEmpty() || input == "";
         }
     }
 

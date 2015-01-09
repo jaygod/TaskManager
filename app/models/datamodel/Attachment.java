@@ -42,12 +42,10 @@ public class Attachment extends Model {
         return find.all();
     }
 
-    public static Attachment getAttachment(int taskId) {
-        Attachment attachment = Ebean.find(Attachment.class)
+    public static List<Attachment> getAttachment(int taskId) {
+        return Ebean.find(Attachment.class)
                 .where()
-                .eq("task_id", taskId).findUnique();
-
-        return attachment;
+                .eq("task_id", taskId).findList();
     }
 
     public String getImageData() {

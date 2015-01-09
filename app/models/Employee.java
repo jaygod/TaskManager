@@ -61,7 +61,7 @@ public class Employee extends Model {
      * @param email email to search
      * @return a user
      */
-    public static Employee findByEmail(String email) {
+    public synchronized static Employee findByEmail(String email) {
         return find.where().eq("email", email).findUnique();
     }
 
@@ -71,7 +71,7 @@ public class Employee extends Model {
      * @param fullname Full name
      * @return a user
      */
-    public static Employee findByFullname(String fullname) {
+    public synchronized static Employee findByFullname(String fullname) {
         return find.where().eq("fullname", fullname).findUnique();
     }
 
@@ -81,7 +81,7 @@ public class Employee extends Model {
      * @param token the confirmation token to use.
      * @return a user if the confirmation token is found, null otherwise.
      */
-    public static Employee findByConfirmationToken(String token) {
+    public synchronized static Employee findByConfirmationToken(String token) {
         return find.where().eq("confirmationToken", token).findUnique();
     }
 

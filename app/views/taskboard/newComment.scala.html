@@ -5,7 +5,6 @@
 @form(action = controllers.routes.TaskBoard.newCommentSave(task.code)) {
 
     @main(user) {
-
         @if(newCommentForm.hasGlobalErrors) {
             <p class="error">
                 <span class="label label-danger">@newCommentForm.globalError.message</span>
