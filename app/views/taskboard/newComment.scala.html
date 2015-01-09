@@ -11,23 +11,18 @@
             </p>
         }
 
-        <div class="panel panel-info assignPanel">
+        <div class="panel panel-default assignPanel">
             <div class="panel-heading">
-                <h3 class="panel-title"><b>New comment</b></h3>
+                <h3 class="panel-title"><i class="fa fa-fw fa-list-alt"></i> New comment</h3>
             </div>
             <div class="panel-body">
                 <fieldset>
                     Add a comment:
-                    @inputText(
-                        newCommentForm("comment"),
-                        'placeholder -> Messages(""),
-                        '_label -> null,
-                        'class -> "form-control"
-                    )
+                    <textarea name="comment" class="form-control" rows="3"></textarea><br>
                 </fieldset>
                 <div class="form-actions">
                     <input type="submit" class="btn btn-primary" value="Add comment">
-                    <a href="/task/@task.code" type="button" class="btn btn-info menuButtons" data-target="/task/@task.code">
+                    <a href="/task/@task.code" type="button" class="btn btn-default menuButtons" data-target="/task/@task.code">
                         Back</a>
                 </div>
             </div>

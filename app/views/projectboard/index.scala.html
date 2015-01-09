@@ -1,17 +1,33 @@
 @(user: Employee)(project: models.datamodel.Project)(taskList: List[models.datamodel.Task])(recentCommentedTasks: List[models.datamodel.Task])
 
 @main(user) {
+
     @wflash()
 
-    <h3> <a href="/project/@project.getId()" data-target="/project/@project.getId()/">@project.getName()</a></h3>
-    <h4>@project.getSummary()</h4>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+            @project.getName() <small>@project.getSummary()</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i> <a href="@routes.Dashboard.index()">Dashboard</a> / @project.getName()
 
-        <hr class="divider">
+                </li>
+            </ol>
+        </div>
+    </div>
 
-        <div class="container">
+    <hr class="divider">
+
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
             @*Task List*@
-            <div class="panel panel-info taskListPanel">
-                <div class="panel-heading"><b>Active tasks</b></div>
+            <div class="panel panel-default taskListPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-fw fa-tasks"></i> Active tasks</h3>
+                </div>
                 <div class="panel-body">
                 @if(taskList.isEmpty) {
                     <tr><b>No tasks assigned yet</b></tr>
@@ -47,7 +63,7 @@
                                 }
 
                             <td><div style="width:100px" ><a href="/task/@task.code" data-target="#/task/@task.code">@task.code</a></div></td>
-                            <td><a href="task/@task.code" data-target="#task/@task.code">@task.summary</a></td>
+                            <td><a href="/task/@task.code" data-target="#/task/@task.code">@task.summary</a></td>
 
                                 @if(task.getTaskProperties().priority.equals("Trivial")) {
                                     <td><i class="fa fa-circle trivial"></i></td>
@@ -73,9 +89,9 @@
                 </div>
             </div>
             @*Comments*@
-            <div class="panel panel-info commentsPanel">
+            <div class="panel panel-default commentsPanel">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><b>Comments</b></h3>
+                    <h3 class="panel-title"><i class="fa fa-fw fa-list-alt"></i> Recent comments</h3>
                 </div>
 
                 <div class="panel-body">
@@ -97,4 +113,5 @@
                 </div>
             </div>
         </div>
+    </div>
 }

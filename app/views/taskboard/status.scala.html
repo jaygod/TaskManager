@@ -1,21 +1,21 @@
 @(user: Employee)(code: String)(statusList: List[String])
 
 @main(user) {
-    <div class="panel panel-info userPanel">
+    <div class="panel panel-default setStatus">
         <div class="panel-heading">
-            <h3 class="panel-title"><b>Set Status</b></h3>
+            <h3 class="panel-title"><i class="fa fa-fw fa-tasks"></i> Set Status</h3>
         </div>
         <div class="panel-body">
             @helper.form(action = routes.TaskBoard.saveStatus(code)) {
                 <b>New status:</b><br>
-                <select name="status">
+                <select class="form-control" name="status">
                     @for(status <- statusList) {
                         <option>@status</option>
 
                     }
-                </select><br><br>
+                </select><br>
                 <input class="btn btn-primary" type="submit" value="Set status">
-                <a href="/task/@code" type="button" class="btn btn-info menuButtons" data-target="/task/@code">Back</a>
+                <a href="/task/@code" type="button" class="btn btn-default menuButtons" data-target="/task/@code">Back</a>
             }
         </div>
     </div>

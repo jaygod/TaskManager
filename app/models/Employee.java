@@ -150,4 +150,8 @@ public class Employee extends Model {
         }
         return "";
     }
+
+    public Long getId() {
+        return new Long(id);
+    }
 }

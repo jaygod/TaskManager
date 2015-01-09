@@ -17,33 +17,19 @@
                 }
 
                 <fieldset>
-                    @inputText(
-                        createProjectForm("projectName"),
-                        'placeholder -> Messages("Project name"),
-                        '_label -> null,
-                        '_help -> Messages("dashboard.createproject.projectname"),
-                        'class -> "form-control"
-                    )
-                    @inputText(
-                        createProjectForm("description"),
-                        'placeholder -> Messages("Project description"),
-                        '_label -> null,
-                        '_help -> Messages("dashboard.createproject.description"),
-                        'class -> "form-control"
-                    )
-                    @inputText(
-                    createProjectForm("version"),
-                    'placeholder -> Messages("Project version"),
-                    '_label -> null,
-                    '_help -> Messages("dashboard.createproject.version"),
-                    'class -> "form-control"
-                    )
+                    Project name
+                    <input class="form-control" name="projectName" placeholder="@Messages("Project name")">
+                    <br>
+                    Description
+                    <input class="form-control" name="description" placeholder="@Messages("Project description")">
+                    <br>
+                    Project version
+                    <input class="form-control" name="version" placeholder="@Messages("Project version")">
+                    <br>
                     Project deadline
-                    @inputText(
+                    @inputDate(
                         createProjectForm("deadline"),
-                        '_label -> null,
-                        'type -> "datetime-local",
-                        'class -> "form-control"
+                        '_label -> null
                     )
                     Select project icon
                     <div id="image_container">
@@ -61,12 +47,10 @@
                     <form name="projectIcon">
                         <input id="projectIconPath" name="projectIconPath" type="hidden" value="" />
                     </form>
-                </fieldset>
-                <div class="container buttonSingup">
                     <div class="form-actions">
-                        <input type="submit" class="btn btn-primary" value="@Messages("dashboard.createproject.createproject")">
+                        <input type="submit" class="btn btn-primary buttonSingup" value="@Messages("dashboard.createproject.createproject")">
                     </div>
-                </div>
+                </fieldset>
             </div>
         }
     }

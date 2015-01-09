@@ -13,31 +13,27 @@
             </p>
         }
 
-        <div class="panel panel-info assignPanel">
+        <div class="panel panel-default assignPanel">
             <div class="panel-heading">
-                <h3 class="panel-title"><b>Assign task</b></h3>
+                <h3 class="panel-title"><i class="fa fa-fw fa-users"></i> Assign task</h3>
             </div>
             <div class="panel-body">
 
                 <fieldset>
                     Assign to: <br>
-                    @select(
-                        field = assignTaskForm("assignName"),
-                        options = options(employeesNamesList),
-                        '_label -> null
-                    )
-
+                    <select class="form-control" name="assignName">
+                    @for(user <- employeesNamesList) {
+                        <option>@user</option>
+                    }
+                    </select>
+                    <br>
                     Add a comment:
-                    @inputText(
-                        assignTaskForm("comment"),
-                        'placeholder -> Messages(""),
-                        '_label -> null,
-                        'class -> "form-control"
-                    )
+                    <textarea name="comment" class="form-control" rows="3"></textarea>
+                    <br>
                 </fieldset>
                 <div class="form-actions">
                     <input type="submit" class="btn btn-primary" value="Assign">
-                    <a href="/task/@task.code" type="button" class="btn btn-info menuButtons" data-target="/task/@task.code">
+                    <a href="/task/@task.code" type="button" class="btn btn-default menuButtons" data-target="/task/@task.code">
                         Back</a>
                 </div>
             </div>

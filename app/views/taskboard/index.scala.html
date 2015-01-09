@@ -1,21 +1,33 @@
 @(user: Employee)(task: models.datamodel.Task)(watchers: List[Employee])
 
 @main(user) {
+
     @wflash()
 
-    <h4> <a href="/project/@task.projectId" data-target="/project/@task.projectId/">@task.getProjectName()</a>
-        /  <a href="/task/@task.code" data-target="/task/@task.code/">@task.code</a></h4>
-    <h2>@task.summary</h2>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                @task.summary
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i> <a href="@routes.Dashboard.index()">Dashboard</a> / <a href="/project/@task.projectId" data-target="/project/@task.projectId/">@task.getProjectName()</a>
+                    / @task.code
+                </li>
+            </ol>
+        </div>
+    </div>
 
     <hr class="divider">
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
 
             @*Details*@
-            <div class="panel panel-info taskPanel">
+            <div class="panel panel-default taskPanel">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><b>Details</b></h3>
+                    <h3 class="panel-title"><i class="fa fa-fw fa-tasks"></i> Details</h3>
                 </div>
                 <div class="panel-body">
                     <div class="col-md-4">
@@ -69,9 +81,9 @@
             </div>
 
             @*Description*@
-            <div class="panel panel-info taskPanel">
+            <div class="panel panel-default taskPanel">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><b>Description</b></h3>
+                    <h3 class="panel-title"><i class="fa fa-fw fa-newspaper-o"></i> Description</h3>
                 </div>
                 <div class="panel-body">
                 @task.description
@@ -79,9 +91,9 @@
             </div>
 
             @*Attachments*@
-            <div class="panel panel-info taskPanel">
+            <div class="panel panel-default taskPanel">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><b>Attachments</b></h3>
+                    <h3 class="panel-title"><i class="fa fa-fw fa-film"></i> Attachments</h3>
                 </div>
                 @if(task.getAttachmentList().size() != 0) {
                     <div class="panel-body">
@@ -103,9 +115,9 @@
             </div>
 
             @*Comments*@
-            <div class="panel panel-info taskPanel">
+            <div class="panel panel-default taskPanel">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><b>Comments</b></h3>
+                    <h3 class="panel-title"><i class="fa fa-fw fa-list-alt"></i> Comments</h3>
                 </div>
                 @if(task.getCommentsList().size() != 0) {
                     <div class="panel-body">
@@ -147,11 +159,11 @@
 
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             @*People*@
-            <div class="panel panel-info taskPanel">
+            <div class="panel panel-default taskPanel">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><b>Dependents</b></h3>
+                    <h3 class="panel-title"><i class="fa fa-fw fa-users"></i> Dependents</h3>
                 </div>
                 <div class="panel-body">
                     <b>Assigned: </b>
@@ -180,9 +192,9 @@
             </div>
 
             @*TimeTracking*@
-            <div class="panel panel-info taskPanel">
+            <div class="panel panel-default taskPanel">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><b>Time tracking</b></h3>
+                    <h3 class="panel-title"><i class="fa fa-fw fa-calendar"></i> Time tracking</h3>
                 </div>
                 <div class="panel-body">
                     <b>Estimated: </b>

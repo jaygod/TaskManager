@@ -7,7 +7,6 @@
 
     @main(user) {
 
-
         <div class="createTask">
             <h3>@Messages("dashboard.createtask.createissue")</h3>
 
@@ -19,38 +18,39 @@
 
             <fieldset>
                 Select Project
-                @select(
-                    field = createTaskForm("projectName"),
-                    options = options(projectsList),
-                    '_label -> null
-                )
+                <select class="form-control" name="projectName">
+                @for(projectName <- projectsList) {
+                    <option>@projectName</option>
+                }
+                </select>
+                <br>
                 Select task type
-                    @select(
-                        field = createTaskForm("issueType"),
-                        options = options(taskTypes),
-                        '_label -> null
-                    )
+                <select class="form-control" name="issueType">
+                @for(task <- taskTypes) {
+                    <option>@task</option>
+                }
+                </select>
+                <br>
                 Assigne
-                @select(
-                    field = createTaskForm("assigneFullName"),
-                    options = options(employeeNamesList),
-                    '_label -> null
-                )
+                <select class="form-control" name="assigneFullName">
+                @for(employeeName <- employeeNamesList) {
+                    <option>@employeeName</option>
+                }
+                </select>
+                <br>
                 Priority
-                @select(
-                    field = createTaskForm("priority"),
-                    options = options(taskPriorites),
-                    '_label -> null
-                )
+                <select class="form-control" name="priority">
+                @for(priority <- taskPriorites) {
+                    <option>@priority</option>
+                }
+                </select>
+                <br>
+
                 Summary
-                @inputText(
-                    createTaskForm("summary"),
-                    'placeholder -> Messages("Project summary"),
-                    '_label -> null,
-                    'class -> "form-control"
-                )
+                <input class="form-control" name="summary" placeholder="@Messages("Project summary")">
+                <br>
                 Estimated time<br>
-                <select name="estimatedTime">
+                <select class="form-control" name="estimatedTime">
                     <option value="1">1 day</option>
                     <option value="2">2 days</option>
                     <option value="3">3 days</option>
@@ -64,35 +64,25 @@
                     <option value="11">11 days</option>
                     <option value="12">12 days</option>
                 </select>
-                <br><br>
+                <br>
                 Label
-                @inputText(
-                    createTaskForm("labels"),
-                    '_label -> null,
-                    'placeholder -> Messages("Labels"),
-                    'class -> "form-control"
-                )
+                <input class="form-control" name="labels" placeholder="@Messages("Labels")">
+                <br>
                 Description
-                @inputText(
-                    createTaskForm("description"),
-                    'placeholder -> Messages("Project description"),
-                    '_label -> null,
-                    'class -> "form-control descriptionForm"
-                )
+                <textarea name="description" class="form-control" rows="3"></textarea>
+                <br>
                 Attatchments
                 <input type="file" multiple name="files" id="files"/>
-
+                <br>
                 Project deadline
                 @inputDate(
                     createTaskForm("deadline"),
                     '_label -> null
                 )
-            </fieldset>
-            <div class="container buttonCreateIssue">
                 <div class="form-actions">
-                    <input type="submit" class="btn btn-primary" value="@Messages("dashboard.createtask.createissue")">
+                    <input type="submit" class="btn btn-primary buttonSingup" value="@Messages("dashboard.createtask.createissue")">
                 </div>
-            </div>
+            </fieldset>
         </div>
     }
 }

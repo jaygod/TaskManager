@@ -1,12 +1,12 @@
 @(user: Employee)(employee: Employee)(code: String)
 
 @main(user) {
-        <div class="panel panel-info userPanel">
+        <div class="panel panel-default userPanel">
             <div class="panel-heading">
                 <h3 class="panel-title"><b>User info</b></h3>
             </div>
             <div class="panel-body">
-                <img class="menuButtons" src="data:image/png;base64,@employee.getImageData()" style="width:30%;height:30%;margin-top:20px;"/> <br>
+                <img class="menuButtons" src="data:image/png;base64,@employee.getImageData()" style="width:20%;height:20%;margin-top:20px;"/> <br>
                 <b>Username: </b>@employee.fullname <br>
                 <b>Email: </b><a href="mailto:@employee.email">@employee.email</a> <br>
                 <b>Joined: </b>@employee.dateCreation <br>
@@ -19,8 +19,10 @@
                 } else {
                     <br><br>
                 }
-                <br>
-                <a href="/task/@code" type="button" class="btn btn-info" data-target="/task/@code">Back</a>
+                @if(code != "pass"){
+                    <br>
+                    <a href="/task/@code" type="button" class="btn btn-default menuButtons" data-target="/task/@code">Back</a>
+                }
             </div>
         </div>
 
