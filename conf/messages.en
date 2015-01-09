@@ -44,6 +44,22 @@ signup.generate.password=Generate a password
 signup.msg.created=You will receive a confirmation email soon. Check your email to activate your account.
 signup.valid.email=Invalid Email
 
+dashboard.createproject.createproject=Create Project
+dashboard.createproject.projectname=Project name
+dashboard.createproject.description=Description
+dashboard.createproject.version=Version
+
+dashboard.createtask.createissue=Create issue
+dashboard.createtask.project=Project
+dashboard.createtask.selectProject=Select Project
+dashboard.createtask.issuetype=Issue Type
+dashboard.createtask.summary=Summary
+dashboard.createtask.priority=Priority
+dashboard.createtask.label=Label
+dashboard.createtask.attatchment=Attatchment
+dashboard.createtask.description=Description
+dashboard.createtask.duedate=Due Date
+
 resetpassword=Reset Password
 resetpassword.mailsent=A mail has been sent, please check your mail.
 resetpassword.success=Your password has been reset.
@@ -69,3 +85,9 @@ mail.reset.fail.message=You (or someone else) entered this email address when tr
 
 mail.reset.confirm.subject=Task Manager - New password
 mail.reset.confirm.message=Hello, <br><br> Your password has been reset.
+
+task.has.been.reasigned=Task has been reassigned
+comment.has.been.added=New comment added
+watcher.has.been.added=New watcher has been added
+watcher.has.been.removed=Watcher has been removed
+work.log.adjusted=Time spent adjusted

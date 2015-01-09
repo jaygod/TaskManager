@@ -1,0 +1,47 @@
+@(user: Employee)(addWatcherTaskForm: Form[TaskBoard.AddWatcher])(task: models.datamodel.Task)(employeesNamesList: List[String])
+
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@form(action = controllers.routes.TaskBoard.addWatcherSave(task.code)) {
+
+    @main(user) {
+
+        @wflash()
+        @if(addWatcherTaskForm.hasGlobalErrors) {
+            <p class="error">
+                <span class="label label-danger">@addWatcherTaskForm.globalError.message</span>
+            </p>
+        }
+
+        <div class="panel panel-default setStatus">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-fw fa-users"></i> Add watcher</h3>
+            </div>
+            <div class="panel-body">
+
+                <fieldset>
+                @if(employeesNamesList.size == 0) {
+                    Everyone are assigned to this task <br>
+                    <a href="/task/@task.code" type="button" class="btn btn-info menuButtons" data-target="/task/@task.code">
+                        Back</a>
+
+                } else {
+                    Select new task watcher: <br>
+                    <select class="form-control" name="watcherName">
+                    @for(user <- employeesNamesList) {
+                        <option>@user</option>
+                    }
+                    </select>
+                    <br>
+                    </fieldset>
+                    <div class="form-actions">
+                        <input type="submit" class="btn btn-primary " value="Add watcher">
+                        <a href="/task/@task.code" type="button" class="btn btn-default menuButtons" data-target="/task/@task.code">
+                            Back</a>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}

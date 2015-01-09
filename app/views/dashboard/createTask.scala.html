@@ -1,0 +1,88 @@
+@(user: Employee)(createTaskForm: Form[Dashboard.CreateTask])(projectsList: List[String])(taskTypes: List[String])(employeeNamesList: List[String])(taskPriorites: List[String])
+
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@form(action = controllers.routes.Dashboard.saveTask(), 'enctype -> "multipart/form-data") {
+
+    @main(user) {
+
+        <div class="createTask">
+            <h3>@Messages("dashboard.createtask.createissue")</h3>
+
+            @if(createTaskForm.hasGlobalErrors) {
+                <p class="error">
+                    <span class="label label-danger">@createTaskForm.globalError.message</span>
+                </p>
+            }
+
+            <fieldset>
+                Select Project
+                <select class="form-control" name="projectName">
+                @for(projectName <- projectsList) {
+                    <option>@projectName</option>
+                }
+                </select>
+                <br>
+                Select task type
+                <select class="form-control" name="issueType">
+                @for(task <- taskTypes) {
+                    <option>@task</option>
+                }
+                </select>
+                <br>
+                Assigne
+                <select class="form-control" name="assigneFullName">
+                @for(employeeName <- employeeNamesList) {
+                    <option>@employeeName</option>
+                }
+                </select>
+                <br>
+                Priority
+                <select class="form-control" name="priority">
+                @for(priority <- taskPriorites) {
+                    <option>@priority</option>
+                }
+                </select>
+                <br>
+
+                Summary
+                <input class="form-control" name="summary" placeholder="@Messages("Project summary")">
+                <br>
+                Estimated time<br>
+                <select class="form-control" name="estimatedTime">
+                    <option value="1">1 day</option>
+                    <option value="2">2 days</option>
+                    <option value="3">3 days</option>
+                    <option value="4">4 days</option>
+                    <option value="5">5 days</option>
+                    <option value="6">6 days</option>
+                    <option value="7">7 days</option>
+                    <option value="8">8 days</option>
+                    <option value="9">9 days</option>
+                    <option value="10">10 days</option>
+                    <option value="11">11 days</option>
+                    <option value="12">12 days</option>
+                </select>
+                <br>
+                Label
+                <input class="form-control" name="labels" placeholder="@Messages("Labels")">
+                <br>
+                Description
+                <textarea name="description" class="form-control" rows="3"></textarea>
+                <br>
+                Attatchments
+                <input type="file" multiple name="files" id="files"/>
+                <br>
+                Project deadline
+                @inputDate(
+                    createTaskForm("deadline"),
+                    '_label -> null
+                )
+                <div class="form-actions">
+                    <input type="submit" class="btn btn-primary buttonSingup" value="@Messages("dashboard.createtask.createissue")">
+                </div>
+            </fieldset>
+        </div>
+    }
+}

@@ -1,0 +1,9 @@
+@(user: Employee)(code: String)(image: String)
+
+@main(user) {
+    <img class="imageBig" src="data:image/jpeg;base64,@image" alt="@image"/> <br>
+    <div class="col-md-12  text-center">
+        <a href="/task/@code" type="button" class="btn btn-default backImageButton" data-target="/task/@code">Back</a>
+    </div>
+
+}

@@ -1,0 +1,31 @@
+@(user: Employee)(newCommentForm: Form[TaskBoard.NewComment])(task: models.datamodel.Task)
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@form(action = controllers.routes.TaskBoard.newCommentSave(task.code)) {
+
+    @main(user) {
+        @if(newCommentForm.hasGlobalErrors) {
+            <p class="error">
+                <span class="label label-danger">@newCommentForm.globalError.message</span>
+            </p>
+        }
+
+        <div class="panel panel-default assignPanel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-fw fa-list-alt"></i> New comment</h3>
+            </div>
+            <div class="panel-body">
+                <fieldset>
+                    Add a comment:
+                    <textarea name="comment" class="form-control" rows="3"></textarea><br>
+                </fieldset>
+                <div class="form-actions">
+                    <input type="submit" class="btn btn-primary" value="Add comment">
+                    <a href="/task/@task.code" type="button" class="btn btn-default menuButtons" data-target="/task/@task.code">
+                        Back</a>
+                </div>
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,56 @@
+@(user: Employee)(createProjectForm: Form[Dashboard.CreateProject])
+
+
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+    @form(action = controllers.routes.Dashboard.saveProject(), 'enctype -> "multipart/form-data") {
+        @main(user) {
+
+            <div class="singIn">
+                <h3>@Messages("dashboard.createproject.createproject")</h3>
+
+                @if(createProjectForm.hasGlobalErrors) {
+                    <p class="error">
+                        <span class="label label-danger">@createProjectForm.globalError.message</span>
+                    </p>
+                }
+
+                <fieldset>
+                    Project name
+                    <input class="form-control" name="projectName" placeholder="@Messages("Project name")">
+                    <br>
+                    Description
+                    <input class="form-control" name="description" placeholder="@Messages("Project description")">
+                    <br>
+                    Project version
+                    <input class="form-control" name="version" placeholder="@Messages("Project version")">
+                    <br>
+                    Project deadline
+                    @inputDate(
+                        createProjectForm("deadline"),
+                        '_label -> null
+                    )
+                    Select project icon
+                    <div id="image_container">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/1.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/2.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/3.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/4.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/5.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/6.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/7.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/8.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/9.png")">
+                        <img class="projectIcons" src="@routes.Assets.at("images/Project_icons/10.png")">
+                    </div>
+                    <form name="projectIcon">
+                        <input id="projectIconPath" name="projectIconPath" type="hidden" value="" />
+                    </form>
+                    <div class="form-actions">
+                        <input type="submit" class="btn btn-primary buttonSingup" value="@Messages("dashboard.createproject.createproject")">
+                    </div>
+                </fieldset>
+            </div>
+        }
+    }

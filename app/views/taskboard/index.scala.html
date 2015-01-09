@@ -1,0 +1,220 @@
+@(user: Employee)(task: models.datamodel.Task)(watchers: List[Employee])
+
+@main(user) {
+
+    @wflash()
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                @task.summary
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i> <a href="@routes.Dashboard.index()">Dashboard</a> / <a href="/project/@task.projectId" data-target="/project/@task.projectId/">@task.getProjectName()</a>
+                    / @task.code
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+
+            @*Details*@
+            <div class="panel panel-default taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-fw fa-tasks"></i> Details</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-4">
+                        <b>Type: </b>
+                        @if(task.getTaskProperties().getTaskType.getType().equals("Bug")) {
+                            <i class="fa fa-bug blocker"></i>
+                        }
+                        @if(task.getTaskProperties().getTaskType.getType().equals("Task")) {
+                            <i class="fa fa-tasks minor"></i>
+                        }
+                        @if(task.getTaskProperties().getTaskType.getType().equals("Story")) {
+                            <i class="fa fa-newspaper-o story"></i>
+                        }
+                        @if(task.getTaskProperties().getTaskType.getType().equals("Technical task")) {
+                            <i class="fa fa-scissors technical_task"></i>
+                        }
+                        @if(task.getTaskProperties().getTaskType.getType().equals("New feature")) {
+                            <i class="fa fa-lightbulb-o major"></i>
+                        }
+                        @if(task.getTaskProperties().getTaskType.getType().equals("Improvment")) {
+                            <i class="fa fa-plus-square trivial"></i>
+                        }
+                        @task.getTaskProperties().getTaskType().getType() <br>
+
+                        <b>Priority: </b>
+                        @if(task.getTaskProperties().priority.equals("Trivial")) {
+                            <i class="fa fa-circle trivial"></i>
+                        }
+                        @if(task.getTaskProperties().priority.equals("Minor")) {
+                            <i class="fa fa-circle minor"></i>
+                        }
+                        @if(task.getTaskProperties().priority.equals("Major")) {
+                            <i class="fa fa-circle major"></i>
+                        }
+                        @if(task.getTaskProperties().priority.equals("Critical")) {
+                            <i class="fa fa-exclamation-circle critical"></i>
+                        }
+                        @if(task.getTaskProperties().priority.equals("Blocker")) {
+                            <i class="fa fa-minus-circle blocker"></i>
+                        }
+                        @task.getTaskProperties().priority <br>
+
+                        <b>Labels: </b>@task.labels <br>
+                    </div>
+                    <div class="col-md-4">
+                        <b>Status: </b>@task.getTaskStatus().getStatus() <br>
+                        <b>Resolution: </b>Unresolved <br>
+                    </div>
+                    <a href="/task/@task.code/status" data-target="/task/@task.code/status" class="btn btn-sm btn-default statusButton">Change status</a>
+                </div>
+            </div>
+
+            @*Description*@
+            <div class="panel panel-default taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-fw fa-newspaper-o"></i> Description</h3>
+                </div>
+                <div class="panel-body">
+                @task.description
+                </div>
+            </div>
+
+            @*Attachments*@
+            <div class="panel panel-default taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-fw fa-film"></i> Attachments</h3>
+                </div>
+                @if(task.getAttachmentList().size() != 0) {
+                    <div class="panel-body">
+                        <div class="attachments">
+                            @for(attachment <- task.getAttachmentList()) {
+                                <a href="/task/@task.code/image/@attachment.getId()" id="image" onclick="/task/ @task.code/image/@attachment.getId()">
+                                <img class="image" src="data:image/jpeg;base64,@attachment.getImageData()" alt="@attachment.name"
+                                style="width:30%;height:30%"/>
+                                </a>
+                                @*<a href="/task/@task.code/image/@attachment.getId()" data-target="/task/@task.code/image/@attachment.getId()">@attachment.name</a>*@
+                            }
+                        </div>
+                    </div>
+                } else {
+                    <div class="panel-body">
+                        No attachments
+                    </div>
+                }
+            </div>
+
+            @*Comments*@
+            <div class="panel panel-default taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-fw fa-list-alt"></i> Comments</h3>
+                </div>
+                @if(task.getCommentsList().size() != 0) {
+                    <div class="panel-body">
+                    @for((comment, index) <- task.getCommentsList().zipWithIndex) {
+                            @if(task.getCommentsList().size() - 1 == index) {
+                                <table class="table table-condensed recemtComment">
+                                    <tr>
+                                        <th><img class="menuButtonsLeft" src="data:image/png;base64,@comment.getCommentAuthor().getImageData()" style="width:3%;margin-right: 5px;"/>
+                                            <a href="/task/@task.code/user/@comment.getUserId()" data-target="/task/@task.code/user/@comment.getUserId()">@comment.getCommentAuthor().fullname</a>
+                                            added a comment - @comment.getAddeddate()</th>
+                                    </tr>
+                                    <tr>
+                                        <td>@comment.getComment()</td>
+                                    </tr>
+                                </table>
+                            } else {
+                                <table class="table table-condensed">
+                                    <tr>
+                                        <th><img class="menuButtonsLeft" src="data:image/png;base64,@comment.getCommentAuthor().getImageData()" style="width:3%;margin-right: 5px;"/>
+                                            <a href="/task/@task.code/user/@comment.getUserId()" data-target="/task/@task.code/user/@comment.getUserId()">@comment.getCommentAuthor().fullname</a>
+                                            added a comment - @comment.getAddeddate()</th>
+                                    </tr>
+                                    <tr>
+                                        <td>@comment.getComment()</td>
+                                    </tr>
+                                </table>
+                            }
+                    }
+                    <a href="/task/@task.code/addcomment" data-target="/task/@task.code/addcomment" class="btn btn-default btn-sm menuButtons">Add comment</a>
+
+                    </div>
+                } else {
+                    <div class="panel-body">
+                        <a href="/task/@task.code/addcomment" data-target="/task/@task.code/addcomment" class="btn btn-default btn-sm menuButtons">
+                            Add comment</a>
+                    </div>
+                }
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+            @*People*@
+            <div class="panel panel-default taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-fw fa-users"></i> Dependents</h3>
+                </div>
+                <div class="panel-body">
+                    <b>Assigned: </b>
+                    <img class="" src="data:image/png;base64,@task.getAssigned().getImageData()" style="width:5%;"/>
+                    <a href="/task/@task.code/user/@task.getAssigned().id" data-target="/task/@task.code/user/@task.getAssigned().id">@task.getAssigned().fullname</a>
+                    <a href="/task/@task.code/assign" data-target="/task/@task.code/" class="btn btn-sm btn-default assignButton">Assign</a>
+
+                    <br>
+
+                    <b>Reporter: </b>
+                    <img class="" src="data:image/png;base64,@task.getTaskProperties().getReporter().getImageData()" style="width:5%;"/>
+                    <a href="/task/@task.code/user/@task.getTaskProperties().getReporter().id" data-target="/task/@task.code/user/@task.getTaskProperties().getReporter().id">
+                    @task.getTaskProperties().getReporter().fullname</a>
+
+                    <br>
+
+                    <b>Watchers: </b>
+                    @for(watcher <- watchers) {
+                        <a href="/task/@task.code/user/@watcher.id" data-target="/task/@task.code/user/@watcher.id">@watcher.fullname</a>
+                        <a href="/task/@task.code/deletewatcher/@watcher.id" class="icon-block">
+                            <i class="fa fa-times deleteCross"></i>
+                        </a>
+                    }
+                    <a href="/task/@task.code/addwatcher" data-target="/task/@task.code/addwatcher" class="btn btn-sm btn-default addWatcherButton">Add Watcher</a>
+                </div>
+            </div>
+
+            @*TimeTracking*@
+            <div class="panel panel-default taskPanel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-fw fa-calendar"></i> Time tracking</h3>
+                </div>
+                <div class="panel-body">
+                    <b>Estimated: </b>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" style="width: 100%;">@task.getTimeTracking().getEstimatedTime() day(s)</div>
+                    </div>
+
+                    <b>Remaining: </b>
+                    <div class="progress">
+                    @if(task.getTimeTracking().getRemainingTimePercent() < 0) {
+                        <div class="progress-bar progress-bar-danger" style="width: @task.getTimeTracking().getOverTimePercent()%;">@task.getTimeTracking().getRemainingTime() day(s) over</div>
+                    } else {
+                        <div class="progress-bar progress-bar-warning" style="width: @task.getTimeTracking().getRemainingTimePercent()%;">@task.getTimeTracking().getRemainingTime()
+                            day(s)</div>
+                    }
+                    </div>
+                    <a href="/task/@task.code/logwork" data-target="/task/@task.code/logwork" class="btn btn-sm btn-default assignButton">Log work</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

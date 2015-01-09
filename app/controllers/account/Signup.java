@@ -1,6 +1,7 @@
 package controllers.account;
 
 import controllers.Application;
+import controllers.Utils;
 import models.Employee;
 import models.utils.AppException;
 import models.utils.Hash;
@@ -8,6 +9,7 @@ import models.utils.Mail;
 import org.apache.commons.mail.EmailException;
 import play.Configuration;
 import play.Logger;
+import play.api.Play;
 import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Controller;
@@ -17,6 +19,7 @@ import views.html.account.signup.create;
 import views.html.account.signup.created;
 import views.html.singUp;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
@@ -30,6 +33,8 @@ import static play.data.Form.form;
  * Date: 31/01/12
  */
 public class Signup extends Controller {
+
+    private static String USER_ICONS_PATH = "public\\images\\User_icons\\";
 
     /**
      * Display the create form.
@@ -74,6 +79,17 @@ public class Signup extends Controller {
             user.fullname = register.fullname;
             user.passwordHash = Hash.createPassword(register.inputPassword);
             user.confirmationToken = UUID.randomUUID().toString();
+
+            String projectIconPath = USER_ICONS_PATH + "default.png";
+            File icon = Play.current().getFile(projectIconPath);
+
+            try {
+                user.setIcon(Utils.imageToByte(icon));
+                user.save();
+            } catch (Exception e) {
+                Logger.error("User icon save error", e);
+                flash("error", Messages.get("error.technical"));
+            }
 
             user.save();
             sendMailAskForConfirmation(user);

@@ -6,10 +6,9 @@ import play.data.format.Formats;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Employee: yesnault
@@ -19,6 +18,9 @@ import java.util.Date;
 public class Employee extends Model {
 
     @Id
+    @Column(name = "id")
+    @SequenceGenerator(name="employee_gen", sequenceName="employee_id_seq",allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_gen")
     public Integer id;
 
     @Constraints.Required
@@ -35,6 +37,10 @@ public class Employee extends Model {
 
     @Constraints.Required
     @Formats.NonEmpty
+    public boolean isAdmin;
+
+    @Constraints.Required
+    @Formats.NonEmpty
     public String passwordHash;
 
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -42,6 +48,9 @@ public class Employee extends Model {
 
     @Formats.NonEmpty
     public Boolean validated = false;
+
+
+    private byte[] icon;
 
     // -- Queries (long id, user.class)
     public static Model.Finder<Integer, Employee> find = new Model.Finder<Integer, Employee>(Integer.class, Employee.class);
@@ -52,7 +61,7 @@ public class Employee extends Model {
      * @param email email to search
      * @return a user
      */
-    public static Employee findByEmail(String email) {
+    public synchronized static Employee findByEmail(String email) {
         return find.where().eq("email", email).findUnique();
     }
 
@@ -62,7 +71,7 @@ public class Employee extends Model {
      * @param fullname Full name
      * @return a user
      */
-    public static Employee findByFullname(String fullname) {
+    public synchronized static Employee findByFullname(String fullname) {
         return find.where().eq("fullname", fullname).findUnique();
     }
 
@@ -72,7 +81,7 @@ public class Employee extends Model {
      * @param token the confirmation token to use.
      * @return a user if the confirmation token is found, null otherwise.
      */
-    public static Employee findByConfirmationToken(String token) {
+    public synchronized static Employee findByConfirmationToken(String token) {
         return find.where().eq("confirmationToken", token).findUnique();
     }
 
@@ -115,8 +124,34 @@ public class Employee extends Model {
 
         user.confirmationToken = null;
         user.validated = true;
+        user.dateCreation = new Date();
+        user.dateCreation.setTime(System.currentTimeMillis());
         user.save();
         return true;
     }
 
+    public static List<Employee> all() {
+        return find.all();
+    }
+
+    public byte[] getIcon() {
+        return icon;
+    }
+
+    public void setIcon(byte[] icon) {
+        this.icon = icon;
+    }
+
+    public String getImageData() {
+        if (icon != null) {
+            sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+            String encode = encoder.encode(icon);
+            return encode;
+        }
+        return "";
+    }
+
+    public Long getId() {
+        return new Long(id);
+    }
 }
