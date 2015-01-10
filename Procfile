@@ -1,1 +1,1 @@
-web: play run --http.port=$PORT $PLAY_OPTS
+web:    --%prod --http.port=$PORT -Dprecompiled=true
