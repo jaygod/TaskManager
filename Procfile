@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/playstartapp -Dhttp.port=${PORT} 
+web: target/universal/stage/bin/PlayStartApp -Dhttp.port=${PORT} 
