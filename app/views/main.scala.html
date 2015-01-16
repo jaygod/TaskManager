@@ -147,8 +147,7 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
-                            @user.fullname <b class="caret"></b></a>
+                        
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="@routes.Dashboard.userPage("pass", user.getId())"><i class="fa fa-fw fa-user"></i> Profile</a>
@@ -169,11 +168,11 @@
                         <li class="active">
                             <a href="/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                         </li>
-                        @if(user.isAdmin) {
+                       
                             <li>
                                 <a href="/createproject"><i class="fa fa-fw fa-bar-chart-o"></i> Create Project</a>
                             </li>
-                        }
+                        
                         <li>
                             <a href="/createtask"><i class="fa fa-fw fa-table"></i> Creeate Task</a>
                         </li>
