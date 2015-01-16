@@ -1,6 +1,6 @@
 import sbt.Keys._
 
-name := """PlayStartApp"""
+name := """playstartapp"""
 
 version := "1.0-SNAPSHOT"
 
